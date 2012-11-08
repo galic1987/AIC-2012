@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+
+    <jaxws:endpoint 
+        id="helloWorld" 
+        implementor="tuwien.aic12.HelloWorldImpl" 
+        address="/HelloWorld" />
+	  
+    <jaxws:endpoint 
+        id="userService" 
+        implementor="tuwien.aic12.server.service.impl.UserServiceImpl" 
+        address="/userService" />
+	  
+    <jaxws:endpoint 
+        id="billingService" 
+        implementor="tuwien.aic12.server.service.impl.BillingServiceImpl" 
+        address="/billingService" />
+    
+    <jaxws:endpoint 
+        id="monitoringService" 
+        implementor="tuwien.aic12.server.service.impl.MonitoringServiceImpl" 
+        address="/monitoringService" />
+	  
+    <jaxws:endpoint 
+        id="searchService" 
+        implementor="tuwien.aic12.server.service.impl.SearchServiceImpl" 
+        address="/searchService" />
+        
+</beans>

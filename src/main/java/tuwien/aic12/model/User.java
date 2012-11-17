@@ -22,6 +22,12 @@ public class User implements Serializable {
     private String username;
     @Column(name = "password")
     private String password;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "kontonummer")
+    private int kontonummer;
+    @Column(name = "company_name")
+    private String company_name;
 
     public User() {
     }
@@ -48,5 +54,47 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @return the kontonummer
+     */
+    public int getKontonummer() {
+        return kontonummer;
+    }
+
+    /**
+     * @param kontonummer the kontonummer to set
+     */
+    public void setKontonummer(int kontonummer) {
+        this.kontonummer = kontonummer;
+    }
+
+    /**
+     * @return the company_name
+     */
+    public String getCompany_name() {
+        return company_name;
+    }
+
+    /**
+     * @param company_name the company_name to set
+     */
+    public void setCompany_name(String company_name) {
+        this.company_name = company_name;
     }
 }

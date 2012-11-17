@@ -22,8 +22,8 @@ public class Job implements Serializable {
     private String dateFrom;
     @Column(name = "date_to")
     private String dateTo;
-    @Column(name = "interval")
-    private Double interval;
+    @Column(name = "intervl")
+    private Double intervl;
     @Column(name = "registred")
     private Boolean registred;
 
@@ -54,11 +54,11 @@ public class Job implements Serializable {
         this.dateTo = dateTo;
     }
     public Double getInterval() {
-        return interval;
+        return intervl;
     }
 
     public void setInterval(Double interval) {
-        this.interval = interval;
+        this.intervl = interval;
     }
     public Boolean getRegistred() {
         return registred;

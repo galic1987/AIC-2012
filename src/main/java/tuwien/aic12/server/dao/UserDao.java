@@ -51,10 +51,25 @@ public class UserDao implements Dao<User> {
     
     public User find(User user) {
         Query q = em.createQuery("SELECT u FROM user u WHERE u.username = '" + user.getUsername() + "' and u.password = '" + user.getPassword() + "';");
-        User usr = (User) q.getResultList().get(0);
-        usr.setToken(nextSessionId());
-        usr.setLastlogintime(new Timestamp(new java.util.Date().getTime()));
-        this.update(usr);
+        User usr = null;
+        if(!q.getResultList().isEmpty()) {
+            usr = (User) q.getResultList().get(0);
+            usr.setToken(nextSessionId());
+            usr.setLastlogintime(new Timestamp(new java.util.Date().getTime()));
+            this.update(usr);
+        }
+        return usr;
+    }
+    
+    public User findUserbyToken(User user) {
+        System.out.println("token to find:" + user.getToken());
+        Query q = em.createQuery("SELECT u FROM user u WHERE u.token = '" + user.getToken() + "'");
+        User usr = null;
+        if(!q.getResultList().isEmpty()) {
+           usr = (User) q.getResultList().get(0);
+           usr.setToken("");
+           this.update(usr);
+        }
         return usr;
     }
     

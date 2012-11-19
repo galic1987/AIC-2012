@@ -31,9 +31,10 @@ public final class Client {
 		service.addPort(SERVICE_USER_PORT, SOAPBinding.SOAP11HTTP_BINDING, endpointAddress);
 
 		UserService userService = service.getPort(UserService.class);
-		System.out.println(userService.sayHi("World"));
-                System.out.println(userService.login("asd", "asd"));
-
+		System.out.println(userService.registerUser("test1", "test1"));
+                String token = userService.login("test1", "test1");
+                System.out.println(token);
+                System.out.println(userService.logout(token));
 	}	
 
 }

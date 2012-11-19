@@ -32,6 +32,7 @@ public final class Client {
 
 		UserService userService = service.getPort(UserService.class);
 		System.out.println(userService.sayHi("World"));
+                System.out.println(userService.login("asd", "asd"));
 
 	}	
 

@@ -8,8 +8,9 @@ public interface UserService {
 
 	public String test(@WebParam(name = "testParam") String testParam);
 
-        public String sayHi(@WebParam(name = "text") String text);
-        
+        public String registerUser(@WebParam(name = "username") String username, @WebParam(name = "password") String password);
+              
         public String login(@WebParam(name = "username") String username, @WebParam(name = "password") String password);
         
+        public String logout(@WebParam(name="token") String token);
 }

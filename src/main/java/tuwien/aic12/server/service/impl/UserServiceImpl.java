@@ -9,7 +9,10 @@ import tuwien.aic12.server.service.UserService;
 @WebService(endpointInterface="tuwien.aic12.server.service.UserService")
 public class UserServiceImpl implements UserService {
 
-     UserDao userDao = new UserDao();
+    private String USER_NOT_FOUND = "User not found!";
+    private String TOKEN_INVALID = "Token is invalid!";
+    private String LOGOUT_SUCCESS = "User is now logged out!";
+    UserDao userDao = new UserDao();
     
     @Override
     public String test(String testParam) {
@@ -17,16 +20,16 @@ public class UserServiceImpl implements UserService {
     }
    
     @Override
-    public String sayHi(String text) {
+    public String registerUser(String username, String password) {
 
         User user = new User();
-        user.setPassword("asd");
-        user.setUsername("asd");
+        user.setPassword(username);
+        user.setUsername(password);
         DBManager.getInstance().getEntityManager().getTransaction().begin();
         user = userDao.create(user);
         DBManager.getInstance().getEntityManager().getTransaction().commit();
 
-        return "Hello " + text + " ... user saved with id : " + user.getId();
+        return "Hello " + user.getUsername() + " ... user saved with id : " + user.getId();
     }
 
     @Override
@@ -34,12 +37,32 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
-        UserDao udao = new UserDao();
         DBManager.getInstance().getEntityManager().getTransaction().begin();
-        user = udao.find(user);
+        user = userDao.find(user);
         DBManager.getInstance().getEntityManager().getTransaction().commit();
-        System.out.print("Token :" + user.getToken());
-        return user.getToken().toString();
         
+        if(user != null) {
+            System.out.print("Token :" + user.getToken());
+            return user.getToken().toString();
+        }
+        else {
+            return USER_NOT_FOUND;
+        }
+    }
+
+    @Override
+    public String logout(String token) {
+        User user = new User();
+        user.setToken(token);
+        DBManager.getInstance().getEntityManager().getTransaction().begin();
+        user = userDao.findUserbyToken(user);
+        DBManager.getInstance().getEntityManager().getTransaction().commit();
+        
+        if(user != null) {
+            return LOGOUT_SUCCESS;
+        }
+        else {
+            return TOKEN_INVALID;
+        }
     }
 }

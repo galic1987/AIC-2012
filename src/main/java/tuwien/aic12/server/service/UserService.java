@@ -10,4 +10,6 @@ public interface UserService {
 
         public String sayHi(@WebParam(name = "text") String text);
         
+        public String login(@WebParam(name = "username") String username, @WebParam(name = "password") String password);
+        
 }

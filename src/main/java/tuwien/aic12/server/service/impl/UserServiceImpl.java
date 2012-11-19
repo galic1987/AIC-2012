@@ -28,4 +28,18 @@ public class UserServiceImpl implements UserService {
 
         return "Hello " + text + " ... user saved with id : " + user.getId();
     }
+
+    @Override
+    public String login(String username, String password) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        UserDao udao = new UserDao();
+        DBManager.getInstance().getEntityManager().getTransaction().begin();
+        user = udao.find(user);
+        DBManager.getInstance().getEntityManager().getTransaction().commit();
+        System.out.print("Token :" + user.getToken());
+        return user.getToken().toString();
+        
+    }
 }

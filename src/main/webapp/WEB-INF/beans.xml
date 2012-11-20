@@ -14,9 +14,9 @@
         address="/HelloWorld" />
 	  
     <jaxws:endpoint 
-        id="userService" 
-        implementor="tuwien.aic12.server.service.impl.UserServiceImpl" 
-        address="/userService" />
+        id="customerService" 
+        implementor="tuwien.aic12.server.service.impl.CustomerServiceImpl" 
+        address="/customerService" />
 	  
     <jaxws:endpoint 
         id="billingService" 

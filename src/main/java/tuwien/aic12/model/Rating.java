@@ -19,16 +19,16 @@ public class Rating implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name = "user")
-    private String user;
+    @Column(name = "customer")
+    private String customer;
     @Column(name = "job")
     private String job;
     @Column(name = "rating")
     private double rating;
     @Column(name = "fee")
     private double fee;
-    @Column(name = "timestamp")
-    private Timestamp timestamp;
+    @Column(name = "ts")
+    private Timestamp ts;
 
     public Rating() {
     }
@@ -39,20 +39,6 @@ public class Rating implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * @return the user
-     */
-    public String getUser() {
-        return user;
-    }
-
-    /**
-     * @param user the user to set
-     */
-    public void setUser(String user) {
-        this.user = user;
     }
 
     /**
@@ -97,17 +83,19 @@ public class Rating implements Serializable {
         this.fee = fee;
     }
 
-    /**
-     * @return the timestamp
-     */
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public String getCustomer() {
+        return customer;
     }
 
-    /**
-     * @param timestamp the timestamp to set
-     */
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
+
+    public Timestamp getTs() {
+        return ts;
+    }
+
+    public void setTs(Timestamp ts) {
+        this.ts = ts;
     }
 }

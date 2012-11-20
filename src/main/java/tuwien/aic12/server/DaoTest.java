@@ -1,7 +1,7 @@
 package tuwien.aic12.server;
 
-import tuwien.aic12.model.User;
-import tuwien.aic12.server.dao.UserDao;
+import tuwien.aic12.model.Customer;
+import tuwien.aic12.server.dao.CustomerDao;
 
 /**
  *
@@ -15,12 +15,12 @@ public class DaoTest {
     
         
     private static void insertUser(){
-    	User user = new User();
-    	user.setPassword("123");
-    	user.setUsername("123");
+    	Customer customer = new Customer();
+    	customer.setPassword("123");
+    	customer.setUsername("123");
     	
-        UserDao userDao = new UserDao();
-        userDao.create(user);        
+        CustomerDao customerDao = new CustomerDao();
+        customerDao.create(customer);        
     }
     
 }

@@ -1,6 +1,10 @@
 package tuwien.aic12.server.dao;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.sql.Timestamp;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import tuwien.aic12.model.User;
 
 /**
@@ -9,6 +13,7 @@ import tuwien.aic12.model.User;
  */
 public class UserDao implements Dao<User> {
 
+    private SecureRandom random = new SecureRandom();
     private EntityManager em;
 
     public UserDao() {
@@ -42,5 +47,33 @@ public class UserDao implements Dao<User> {
     @Override
     public User read(int id) {
         return em.find(User.class, id);
+    }
+
+    public User find(User user) {
+        Query q = em.createQuery("SELECT u FROM user u WHERE u.username = '" + user.getUsername() + "' and u.password = '" + user.getPassword() + "';");
+        User usr = null;
+        if (!q.getResultList().isEmpty()) {
+            usr = (User) q.getResultList().get(0);
+            usr.setToken(nextSessionId());
+            usr.setLastlogintime(new Timestamp(new java.util.Date().getTime()));
+            this.update(usr);
+        }
+        return usr;
+    }
+
+    public User findUserbyToken(User user) {
+        System.out.println("token to find:" + user.getToken());
+        Query q = em.createQuery("SELECT u FROM user u WHERE u.token = '" + user.getToken() + "'");
+        User usr = null;
+        if (!q.getResultList().isEmpty()) {
+            usr = (User) q.getResultList().get(0);
+            usr.setToken("");
+            this.update(usr);
+        }
+        return usr;
+    }
+
+    public String nextSessionId() {
+        return new BigInteger(130, random).toString(32);
     }
 }

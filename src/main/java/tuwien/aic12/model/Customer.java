@@ -12,8 +12,8 @@ import javax.persistence.Id;
  *
  * @author bisanov
  */
-@Entity(name = "user")
-public class User implements Serializable {
+@Entity(name = "customer")
+public class Customer implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -34,7 +34,7 @@ public class User implements Serializable {
     @Column(name = "lastlogintime")
     private Timestamp lastlogintime;
 
-    public User() {
+    public Customer() {
     }
 
     public Long getId() {

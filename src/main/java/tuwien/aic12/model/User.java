@@ -1,6 +1,7 @@
 package tuwien.aic12.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,6 +29,10 @@ public class User implements Serializable {
     private int kontonummer;
     @Column(name = "company_name")
     private String company_name;
+    @Column(name = "token")
+    private String token;
+    @Column(name = "lastlogintime")
+    private Timestamp lastlogintime;
 
     public User() {
     }
@@ -96,5 +101,33 @@ public class User implements Serializable {
      */
     public void setCompany_name(String company_name) {
         this.company_name = company_name;
+    }
+
+    /**
+     * @return the token
+     */
+    public String getToken() {
+        return token;
+    }
+
+    /**
+     * @param token the token to set
+     */
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    /**
+     * @return the lastlogintime
+     */
+    public Timestamp getLastlogintime() {
+        return lastlogintime;
+    }
+
+    /**
+     * @param lastlogintime the lastlogintime to set
+     */
+    public void setLastlogintime(Timestamp lastlogintime) {
+        this.lastlogintime = lastlogintime;
     }
 }

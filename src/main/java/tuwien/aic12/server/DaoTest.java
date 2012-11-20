@@ -1,11 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package tuwien.aic12.server;
 
 import tuwien.aic12.model.User;
-import tuwien.aic12.server.dao.DBManager;
+import tuwien.aic12.server.dao.UserDao;
 
 /**
  *
@@ -13,10 +9,8 @@ import tuwien.aic12.server.dao.DBManager;
  */
 public class DaoTest {
     
-    public static void main(String [] args) {
-        
-        insertUser();
-        
+    public static void main(String [] args) {        
+        // insertUser();
     }
     
         
@@ -25,10 +19,8 @@ public class DaoTest {
     	user.setPassword("123");
     	user.setUsername("123");
     	
-        DBManager.getInstance().getEntityManager().getTransaction().begin();
-    	DBManager.getInstance().getEntityManager().persist(user);
-    	DBManager.getInstance().getEntityManager().getTransaction().commit();
-        
+        UserDao userDao = new UserDao();
+        userDao.create(user);        
     }
     
 }

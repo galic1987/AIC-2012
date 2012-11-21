@@ -2,6 +2,7 @@ package tuwien.aic12.server.twitter.semantics;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,6 +18,8 @@ import weka.classifiers.bayes.NaiveBayes;
  * @author vanjalee
  */
 public class TwitterSemantics {
+
+    private DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
     public Double analyse(List<Tweet> tweets) {
         Double aMiddle = 0.0;
@@ -55,7 +58,7 @@ public class TwitterSemantics {
         } catch (Exception ex) {
             Logger.getLogger(TwitterSemantics.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return aMiddle;
+        return Double.valueOf(decimalFormat.format(aMiddle));
     }
 
     private List<Double> convertResults(List<String> stringResults) {

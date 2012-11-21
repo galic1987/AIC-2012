@@ -1,25 +1,22 @@
 package tuwien.aic12.server;
 
-import java.util.List;
 import tuwien.aic12.model.Customer;
 import tuwien.aic12.server.dao.CustomerDao;
-import tuwien.aic12.server.twitter.search.TwitterSearcher;
-import tuwien.aic12.server.twitter.semantics.TwitterSemantics;
-import twitter4j.Tweet;
+import tuwien.aic12.server.twitter.TwitterService;
 
 /**
  *
  * @author vanjalee
  */
-public class DaoTest {
+public class Test {
 
     public static void main(String[] args) {
         // insertUser();
-        String subject = "whore";
-        TwitterSearcher twitterSearcher = new TwitterSearcher();
-        List<Tweet> toBeAnalysed = twitterSearcher.createTwitterQuery(subject);
-        TwitterSemantics twitterSemantics = new TwitterSemantics();
-        Double result = twitterSemantics.analyse(toBeAnalysed);
+        String subject = "Nick Diaz";
+        
+        TwitterService twitterService = new TwitterService();
+        Double result = twitterService.getOpinionOf(subject);
+        
         System.out.println("Twitter community opinion of : " + subject + ", is : " + result);
     }
 

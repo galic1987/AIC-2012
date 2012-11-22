@@ -25,9 +25,9 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = new Customer();
         customer.setPassword(username);
         customer.setUsername(password);
-        DBManager.getInstance().getEntityManager().getTransaction().begin();
+        //DBManager.getInstance().getEntityManager().getTransaction().begin();
         customer = customerDao.create(customer);
-        DBManager.getInstance().getEntityManager().getTransaction().commit();
+        //DBManager.getInstance().getEntityManager().getTransaction().commit();
 
         return "Hello " + customer.getUsername() + " ... customer saved with id : " + customer.getId();
     }
@@ -37,9 +37,9 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = new Customer();
         customer.setUsername(customername);
         customer.setPassword(password);
-        DBManager.getInstance().getEntityManager().getTransaction().begin();
+        //DBManager.getInstance().getEntityManager().getTransaction().begin();
         customer = customerDao.find(customer);
-        DBManager.getInstance().getEntityManager().getTransaction().commit();
+        //DBManager.getInstance().getEntityManager().getTransaction().commit();
 
         if (customer != null) {
             System.out.print("Token :" + customer.getToken());
@@ -53,9 +53,9 @@ public class CustomerServiceImpl implements CustomerService {
     public String logout(String token) {
         Customer customer = new Customer();
         customer.setToken(token);
-        DBManager.getInstance().getEntityManager().getTransaction().begin();
+        //DBManager.getInstance().getEntityManager().getTransaction().begin();
         customer = customerDao.findCustomerByToken(customer);
-        DBManager.getInstance().getEntityManager().getTransaction().commit();
+        //DBManager.getInstance().getEntityManager().getTransaction().commit();
 
         if (customer != null) {
             return LOGOUT_SUCCESS;

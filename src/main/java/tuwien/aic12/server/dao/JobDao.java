@@ -1,6 +1,7 @@
 package tuwien.aic12.server.dao;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import tuwien.aic12.model.Job;
 
 /**
@@ -42,5 +43,9 @@ public class JobDao implements Dao<Job> {
     @Override
     public Job read(int id) {
         return em.find(Job.class, id);
+    }
+    
+    public void readRegisteredJobs() {
+        Query q = em.createQuery("SELECT j FROM job j WHERE j.registered = '1';");
     }
 }

@@ -26,6 +26,8 @@ public class Job implements Serializable {
     private Double intervl;
     @Column(name = "registred")
     private Boolean registred;
+    @Column(name = "custid")
+    private Long custid;
 
     public Job() {
     }
@@ -66,5 +68,19 @@ public class Job implements Serializable {
 
     public void setRegistred(Boolean registred) {
         this.registred = registred;
+    }
+
+    /**
+     * @return the custid
+     */
+    public Long getCustid() {
+        return custid;
+    }
+
+    /**
+     * @param custid the custid to set
+     */
+    public void setCustid(Long custid) {
+        this.custid = custid;
     }
 }

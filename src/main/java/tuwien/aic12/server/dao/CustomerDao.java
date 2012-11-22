@@ -45,7 +45,7 @@ public class CustomerDao implements Dao<Customer> {
     }
 
     @Override
-    public Customer read(int id) {
+    public Customer read(long id) {
         return em.find(Customer.class, id);
     }
 

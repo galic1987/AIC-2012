@@ -13,6 +13,6 @@ public interface Dao<T> {
     public T create(T t);
     public T update(T t);
     public boolean delete(T t);
-    public T read(int id);
+    public T read(long id);
     
 }

@@ -1,6 +1,8 @@
 package tuwien.aic12.server.dao;
 
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import tuwien.aic12.model.Rating;
 
 /**
@@ -40,7 +42,12 @@ public class RatingDao implements Dao<Rating> {
     }
 
     @Override
-    public Rating read(int id) {
+    public Rating read(long id) {
         return em.find(Rating.class, id);
+    }
+    
+    public List<Rating> findRatings(String dateFrom, String dateTo, long custId, long jobId) {
+        Query q = em.createQuery("SELECT r FROM rating r WHERE r.ts >= '" + dateFrom + "' AND r.ts <= " + dateTo + "' AND r.job='" + jobId + "' AND r.customer='" + custId + "'");
+        return q.getResultList();   
     }
 }

@@ -20,9 +20,9 @@ public class Rating implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(name = "customer")
-    private String customer;
+    private Long customer;
     @Column(name = "job")
-    private String job;
+    private Long job;
     @Column(name = "rating")
     private double rating;
     @Column(name = "fee")
@@ -44,14 +44,14 @@ public class Rating implements Serializable {
     /**
      * @return the job
      */
-    public String getJob() {
+    public Long getJob() {
         return job;
     }
 
     /**
      * @param job the job to set
      */
-    public void setJob(String job) {
+    public void setJob(Long job) {
         this.job = job;
     }
 
@@ -83,11 +83,11 @@ public class Rating implements Serializable {
         this.fee = fee;
     }
 
-    public String getCustomer() {
+    public Long getCustomer() {
         return customer;
     }
 
-    public void setCustomer(String customer) {
+    public void setCustomer(Long customer) {
         this.customer = customer;
     }
 

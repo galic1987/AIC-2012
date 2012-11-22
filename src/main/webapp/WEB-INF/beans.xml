@@ -30,7 +30,7 @@
 	  
     <jaxws:endpoint 
         id="searchService" 
-        implementor="tuwien.aic12.server.service.impl.SearchServiceImpl" 
+        implementor="tuwien.aic12.server.service.impl.QueryServiceImpl" 
         address="/searchService" />
         
 </beans>

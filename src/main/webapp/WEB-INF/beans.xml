@@ -33,4 +33,10 @@
         implementor="tuwien.aic12.server.service.impl.QueryServiceImpl" 
         address="/searchService" />
         
+        
+        <jaxws:endpoint 
+        id="sentimentService" 
+        implementor="tuwien.aic12.server.service.impl.SentimentServiceImpl" 
+        address="/sentimentService" />
+        
 </beans>

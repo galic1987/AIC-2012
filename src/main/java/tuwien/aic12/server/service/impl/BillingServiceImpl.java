@@ -35,4 +35,33 @@ public class BillingServiceImpl implements BillingService {
         return price;
     }
 
+    @Override
+    public String payRating(long ratingId) {
+        RatingDao rd = new RatingDao();
+        Rating rat = rd.findRatingById(ratingId);
+        rat.setFee(0.0);
+        rat.setDuration((long) 0.0);
+        return "Rating payed!";
+    }
+
+    @Override
+    public String payBill(String token) {
+        
+        CustomerDao customerDao = new CustomerDao();
+        
+        Customer customer = new Customer();
+        customer.setToken(token);
+        customer = customerDao.findCustomerByToken(customer);
+        
+        RatingDao rd = new RatingDao();
+        List<Rating> list_rating = rd.findRatingsByCustomer(customer.getId());
+        for (Rating rating : list_rating) {
+            rating.setFee(0);
+            rating.setDuration((long) 0);
+        }
+        
+        return "Bill payed!";
+    }
+    
+
 }

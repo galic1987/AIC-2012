@@ -54,4 +54,8 @@ public class RatingDao implements Dao<Rating> {
         Query q = em.createQuery("SELECT r FROM rating r WHERE r.customer='" + custId + "'");
         return q.getResultList();
     }
+    public Rating findRatingById(long ratingId){
+        Query q = em.createQuery("SELECT r FROM rating r WHERE r.id='" + ratingId + "'");
+        return (Rating) q.getResultList().get(0);
+    }
 }

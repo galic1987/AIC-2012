@@ -39,6 +39,7 @@ public class MonitorJob implements Runnable {
         rating.setJob(job.getId());
         rating.setRating(result);
         rating.setFee(10);
+        rating.setDuration(duration);
         rd.create(rating);
     }
 

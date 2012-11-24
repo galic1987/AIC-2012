@@ -29,6 +29,8 @@ public class Rating implements Serializable {
     private double fee;
     @Column(name = "ts")
     private Timestamp ts;
+    @Column(name = "duration")
+    private Long duration;
 
     public Rating() {
     }
@@ -97,5 +99,12 @@ public class Rating implements Serializable {
 
     public void setTs(Timestamp ts) {
         this.ts = ts;
+    }
+    public Long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Long duration) {
+        this.duration = duration;
     }
 }

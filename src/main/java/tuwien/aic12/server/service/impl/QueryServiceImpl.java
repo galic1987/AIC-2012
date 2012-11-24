@@ -42,7 +42,7 @@ public class QueryServiceImpl implements QueryService{
                 counter_one++;
             }
         }
-        res = Math.max(counter_one, counter_zero);
+        /*res = Math.max(counter_one, counter_zero);
         if (res == counter_one) {
             res = 1;
         }
@@ -52,7 +52,9 @@ public class QueryServiceImpl implements QueryService{
         else {
             res = 2;
         }
-        return ""+res;
+        return ""+res;*/
+        //should return arithmetic average
+        return ""+counter_one/counter_all;
     }
 
     @Override

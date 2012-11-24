@@ -28,6 +28,8 @@ public class Job implements Serializable {
     private Boolean registred;
     @Column(name = "custid")
     private Long custid;
+    @Column(name = "status")
+    private Integer status;
 
     public Job() {
     }
@@ -82,5 +84,13 @@ public class Job implements Serializable {
      */
     public void setCustid(Long custid) {
         this.custid = custid;
+    }
+    
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

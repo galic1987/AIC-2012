@@ -42,6 +42,13 @@ public class QueryServiceImpl implements QueryService{
                 counter_one++;
             }
         }
+        
+        
+        if (counter_all == 0){
+            return "no Ratings";
+        }
+        
+        
         /*res = Math.max(counter_one, counter_zero);
         if (res == counter_one) {
             res = 1;
@@ -57,12 +64,13 @@ public class QueryServiceImpl implements QueryService{
         return ""+counter_one/counter_all;
     }
 
-    @Override
+     @Override
     public String registerService(String token) {
         Customer customer = new Customer();
         customer.setToken(token);
         customer = customerDao.findCustomerByToken(customer);
         
+        if(customer != null){
         Job job = new Job();
         Date startDate = new Date();
         job.setDateFrom(startDate.toString());
@@ -72,6 +80,9 @@ public class QueryServiceImpl implements QueryService{
         
         jd.create(job);
         return "Job registered successfully!";
+
+        }
+        return "No such user";
     }
 
     @Override
@@ -80,6 +91,9 @@ public class QueryServiceImpl implements QueryService{
         customer.setToken(token);
         customer = customerDao.findCustomerByToken(customer);
         
+        
+        if(customer != null){
+
         Job job = new Job();
         job = jd.read(jobid);
         Date stopDate = new Date();
@@ -88,8 +102,11 @@ public class QueryServiceImpl implements QueryService{
         job.setInterval((double) 0);
         job.setRegistred(Boolean.FALSE);
         jd.update(job);
-        
         return "Job unregistered successfully!";
+
+        }
+         return "No such user";
+
     }
     
     

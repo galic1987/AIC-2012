@@ -9,4 +9,15 @@ public class MonitoringServiceImpl implements MonitoringService{
 		return "Mother fucker! " + testParam;
 	}
 
+    @Override
+    public String start() {
+        
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String stop() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

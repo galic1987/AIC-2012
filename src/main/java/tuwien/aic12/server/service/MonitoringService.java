@@ -7,5 +7,7 @@ import javax.jws.WebService;
 public interface MonitoringService {
 
 	public String test(@WebParam(name = "testParam") String testParam);
-	
+	public String start();
+        public String stop();
+        
 }

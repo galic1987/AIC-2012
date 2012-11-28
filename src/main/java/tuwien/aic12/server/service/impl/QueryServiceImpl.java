@@ -23,9 +23,7 @@ public class QueryServiceImpl implements QueryService{
     @Override
     public String search(String token, String dateFrom, String dateTo, long jobid) {
         int counter_all = 0;
-        int counter_one = 0;
-        int counter_zero = 0;
-        int res = 2;
+        double sum = 0;
         
         Customer customer = new Customer();
         customer.setToken(token);
@@ -35,20 +33,19 @@ public class QueryServiceImpl implements QueryService{
         List<Rating> list_rating = rd.findRatings(dateFrom, dateTo, customer.getId(), jobid);
         for (Rating rating : list_rating) {
             counter_all++;
-            if (rating.getRating() == 0) {
-                counter_zero++;
-            }
-            else if (rating.getRating() == 1) {
-                counter_one++;
-            }
+//            if (rating.getRating() == 0) {
+//                counter_zero++;
+//            }
+//            else if (rating.getRating() == 1) {
+//                counter_one++;
+//            }
+            sum += rating.getRating();
         }
         
         
         if (counter_all == 0){
-            return "no Ratings";
-        }
-        
-        
+            return "no Ratings found!";
+        } 
         /*res = Math.max(counter_one, counter_zero);
         if (res == counter_one) {
             res = 1;
@@ -61,7 +58,7 @@ public class QueryServiceImpl implements QueryService{
         }
         return ""+res;*/
         //should return arithmetic average
-        return ""+counter_one/counter_all;
+        return "" + sum / counter_all;
     }
 
      @Override
@@ -93,17 +90,18 @@ public class QueryServiceImpl implements QueryService{
         
         
         if(customer != null){
-
-        Job job = new Job();
-        job = jd.read(jobid);
-        Date stopDate = new Date();
-        job.setDateTo(stopDate.toString());
-        job.setCustid(customer.getId());
-        job.setInterval((double) 0);
-        job.setRegistred(Boolean.FALSE);
-        jd.update(job);
-        return "Job unregistered successfully!";
-
+            Job job = job = jd.read(jobid);
+            if(job != null) {
+            Date stopDate = new Date();
+            job.setDateTo(stopDate.toString());
+            job.setCustid(customer.getId());
+            job.setInterval((double) 0);
+            job.setRegistred(Boolean.FALSE);
+            jd.update(job);
+            return "Job unregistered successfully!";
+            } else {
+                return "Jon not found!";
+            }
         }
          return "No such user";
 

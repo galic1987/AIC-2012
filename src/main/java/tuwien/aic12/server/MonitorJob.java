@@ -21,7 +21,7 @@ public class MonitorJob implements Runnable {
     private QName SERVICE_SEARCH = new QName(SERVER_HOME,
             "monitoringService");
     private QName MONITOR_SERVICE_PORT = new QName(SERVER_HOME,
-            "monitoringService");
+            "monitoringServicePort");
     
     @Override
     public void run() {

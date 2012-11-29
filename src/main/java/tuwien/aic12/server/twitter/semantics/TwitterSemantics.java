@@ -26,7 +26,6 @@ public class TwitterSemantics {
         ClassifierBuilder clb = new ClassifierBuilder();
         Options opt = new Options();
         clb.setOpt(opt);
-        //seleziona solo i termini utilizzati più di una volta
         opt.setSelectedFeaturesByFrequency(true);
         // seleziona solamente 150 termini
         opt.setNumFeatures(150);

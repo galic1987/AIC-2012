@@ -19,9 +19,9 @@ public class MonitorJob implements Runnable {
     private Job job;
     private String SERVER_HOME = "http://service.server.aic12.tuwien/";
     private QName SERVICE_SEARCH = new QName(SERVER_HOME,
-            "monitoringService");
+            "MonitoringService");
     private QName MONITOR_SERVICE_PORT = new QName(SERVER_HOME,
-            "monitoringServicePort");
+            "MonitoringServicePort");
     
     @Override
     public void run() {

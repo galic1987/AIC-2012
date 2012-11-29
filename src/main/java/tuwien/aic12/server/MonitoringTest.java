@@ -23,13 +23,13 @@ public class MonitoringTest {
     
    private static final String SERVER_HOME = "http://service.server.aic12.tuwien/";
     private static final QName SERVICE_CUSTOMER = new QName(SERVER_HOME,
-            "customerService");
+            "CustomerService");
     private static final QName SERVICE_CUSTOMER_PORT = new QName(SERVER_HOME,
-            "customerServicePort");
+            "CustomerServicePort");
     private static final QName SERVICE_SEARCH = new QName(SERVER_HOME,
-            "searchService");
+            "QueryService");
     private static final QName SERVICE_SEARCH_PORT = new QName(SERVER_HOME,
-            "searchServicePort");
+            "QueryServicePort");
     
     public static void main(String[] args) throws InterruptedException {
         JobDao jobDao = new JobDao();
@@ -52,8 +52,8 @@ public class MonitoringTest {
         Service service = Service.create(SERVICE_CUSTOMER);
         Service searchService = Service.create(SERVICE_SEARCH);
         // Endpoint Address
-        String endpointAddress = "http://localhost:8084/aic12/customerService";
-        String endpointSearchService = "http://localhost:8084/aic12/searchService";
+        String endpointAddress = "http://localhost:8084/aic12/CustomerService";
+        String endpointSearchService = "http://localhost:8084/aic12/QueryService";
         // Add a port to the Service
         service.addPort(SERVICE_CUSTOMER_PORT, SOAPBinding.SOAP11HTTP_BINDING, endpointAddress);
         searchService.addPort(SERVICE_SEARCH_PORT, SOAPBinding.SOAP11HTTP_BINDING, endpointSearchService);

@@ -68,16 +68,15 @@ public class QueryServiceImpl implements QueryService{
         customer = customerDao.findCustomerByToken(customer);
         
         if(customer != null){
-        Job job = new Job();
-        Date startDate = new Date();
-        job.setDateFrom(startDate.toString());
-        job.setCustid(customer.getId());
-        job.setRegistred(Boolean.TRUE);
-        job.setInterval((double) 0);
-        
-        jd.create(job);
-        return "Job registered successfully!";
+            Job job = new Job();
+            Date startDate = new Date();
+            job.setDateFrom(startDate.toString());
+            job.setCustid(customer.getId());
+            job.setRegistred(Boolean.TRUE);
+            job.setInterval((double) 0);
 
+            job = jd.create(job);
+            return job.getId().toString();
         }
         return "No such user";
     }
@@ -94,13 +93,11 @@ public class QueryServiceImpl implements QueryService{
             if(job != null) {
             Date stopDate = new Date();
             job.setDateTo(stopDate.toString());
-            job.setCustid(customer.getId());
-            job.setInterval((double) 0);
             job.setRegistred(Boolean.FALSE);
             jd.update(job);
             return "Job unregistered successfully!";
             } else {
-                return "Jon not found!";
+                return "Job not found!";
             }
         }
          return "No such user";

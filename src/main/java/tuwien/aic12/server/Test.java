@@ -12,7 +12,7 @@ public class Test {
 
     public static void main(String[] args) {
         // insertUser();
-        String subject = "Nick Diaz";
+        String subject = "Google";
         
         TwitterService twitterService = new TwitterService();
         Double result = twitterService.getOpinionOf(subject);
@@ -22,8 +22,8 @@ public class Test {
 
     private static void insertUser() {
         Customer customer = new Customer();
-        customer.setPassword("123");
-        customer.setUsername("123");
+        customer.setPassword("test 2");
+        customer.setUsername("test 2");
 
         CustomerDao customerDao = new CustomerDao();
         customerDao.create(customer);

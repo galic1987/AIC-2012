@@ -3,40 +3,34 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxws="http://cxf.apache.org/jaxws"
        xsi:schemaLocation="
-	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
     <import resource="classpath:META-INF/cxf/cxf.xml" />
-
-    <jaxws:endpoint 
-        id="helloWorld" 
-        implementor="tuwien.aic12.HelloWorldImpl" 
-        address="/HelloWorld" />
-	  
+ 
     <jaxws:endpoint 
         id="customerService" 
         implementor="tuwien.aic12.server.service.impl.CustomerServiceImpl" 
-        address="/customerService" />
+        address="/CustomerService" />
 	  
     <jaxws:endpoint 
         id="billingService" 
         implementor="tuwien.aic12.server.service.impl.BillingServiceImpl" 
-        address="/billingService" />
+        address="/BillingService" />
     
     <jaxws:endpoint 
         id="monitoringService" 
         implementor="tuwien.aic12.server.service.impl.MonitoringServiceImpl" 
-        address="/monitoringService" />
-	  
+        address="/MonitoringService" />
+    
     <jaxws:endpoint 
-        id="searchService" 
+        id="analyserService" 
+        implementor="tuwien.aic12.server.service.impl.AnalyserServiceImpl" 
+        address="/AnalyserService" />
+    
+    <jaxws:endpoint 
+        id="queryService" 
         implementor="tuwien.aic12.server.service.impl.QueryServiceImpl" 
-        address="/searchService" />
-        
-        
-        <jaxws:endpoint 
-        id="sentimentService" 
-        implementor="tuwien.aic12.server.service.impl.SentimentServiceImpl" 
-        address="/sentimentService" />
-        
+        address="/QueryService" />
+  
 </beans>

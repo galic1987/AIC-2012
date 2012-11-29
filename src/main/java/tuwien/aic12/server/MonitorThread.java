@@ -12,11 +12,8 @@ import tuwien.aic12.server.dao.JobDao;
  *
  * @author alexsiba
  */
-public class MonitorThread extends Thread{
-    
+public class MonitorThread extends Thread {
+
     JobDao jobDao = new JobDao();
-    List<Job> jobList= jobDao.readRegisteredJobs();
-    
-    
-    
+    List<Job> jobList = jobDao.readRegisteredJobs();
 }

@@ -1,23 +1,15 @@
 package tuwien.aic12.server.service.impl;
 
-import javax.jws.WebService;
 import tuwien.aic12.model.Customer;
 import tuwien.aic12.server.dao.CustomerDao;
-import tuwien.aic12.server.dao.DBManager;
 import tuwien.aic12.server.service.CustomerService;
 
-@WebService(endpointInterface = "tuwien.aic12.server.service.CustomerService")
 public class CustomerServiceImpl implements CustomerService {
 
     private String CUSTOMER_NOT_FOUND = "Customer not found!";
     private String TOKEN_INVALID = "Token is invalid!";
     private String LOGOUT_SUCCESS = "Customer is now logged out!";
     CustomerDao customerDao = new CustomerDao();
-
-    @Override
-    public String test(String testParam) {
-        return "U rock Dude!!! " + testParam;
-    }
 
     @Override
     public String registerCustomer(String username, String password) {

@@ -29,7 +29,7 @@ public class TwitterSemantics {
         //seleziona solo i termini utilizzati più di una volta
         opt.setSelectedFeaturesByFrequency(true);
         // seleziona solamente 150 termini
-        // opt.setNumFeatures(150);
+        opt.setNumFeatures(150);
         // rimuove le emoticons
         opt.setRemoveEmoticons(true);
         List<String> results = new ArrayList<String>();

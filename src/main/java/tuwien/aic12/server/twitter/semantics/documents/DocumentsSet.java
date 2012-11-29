@@ -2,9 +2,11 @@ package tuwien.aic12.server.twitter.semantics.documents;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Collections;
@@ -13,7 +15,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import tuwien.aic12.server.twitter.semantics.classifier.Preprocesser;
+import tuwien.aic12.server.twitter.semantics.util.ArffFileCreator;
 import tuwien.aic12.server.twitter.semantics.util.Options;
 
 /**
@@ -110,6 +115,32 @@ public class DocumentsSet {
         return _polarity;
     }
 
+    public FileOutputStream createFileOutputStream(String path) {
+        FileOutputStream out = null;
+        try {
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path);
+            String[] split = path.split("/");
+            out = new FileOutputStream(new File(split[split.length - 1]));
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            while ((read = inputStream.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            inputStream.close();
+            out.flush();
+            return out;
+        } catch (IOException ex) {
+            Logger.getLogger(ArffFileCreator.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                out.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ArffFileCreator.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+
     /**
      * creates a file containing all preprocessed tweets
      *
@@ -123,12 +154,12 @@ public class DocumentsSet {
         List<String> p = new LinkedList<String>();
         try {
             Preprocesser pr = new Preprocesser(opt);
-            FileInputStream fstream = new FileInputStream(path_input);
-            DataInputStream in = new DataInputStream(fstream);
+            InputStream realPath = getClass().getClassLoader().getResourceAsStream(path_input);
+            DataInputStream in = new DataInputStream(realPath);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String strLine;
             String str, pol;
-            FileOutputStream prova = new FileOutputStream(path_output);
+            FileOutputStream prova = createFileOutputStream(path_output);
             PrintStream scrivi = new PrintStream(prova);
             while ((strLine = br.readLine()) != null) {
                 String[] items = strLine.split(";;");
@@ -156,8 +187,8 @@ public class DocumentsSet {
         Map<Integer, List<Integer>> index = new HashMap<Integer, List<Integer>>();
         Map<String, Integer> f2i = this._feats.getF2i();
         try {
-            FileInputStream fstream = new FileInputStream(path_input);
-            DataInputStream in = new DataInputStream(fstream);
+            InputStream realPath = getClass().getClassLoader().getResourceAsStream(path_input);
+            DataInputStream in = new DataInputStream(realPath);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String strLine;
             while ((strLine = br.readLine()) != null) {
@@ -201,8 +232,8 @@ public class DocumentsSet {
         Map<Integer, String> i2f = new HashMap<Integer, String>();
         Map<String, Integer> f2i = new HashMap<String, Integer>();
         try {
-            FileInputStream fstream = new FileInputStream(path_input);
-            DataInputStream in = new DataInputStream(fstream);
+            InputStream realPath = getClass().getClassLoader().getResourceAsStream(path_input);
+            DataInputStream in = new DataInputStream(realPath);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String strLine;
             while ((strLine = br.readLine()) != null) {

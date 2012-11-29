@@ -3,11 +3,10 @@ package tuwien.aic12.server.service;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-@WebService(name="monitoringService")
+@WebService//(name = "MonitoringService", portName="MonitoringServicePort")
 public interface MonitoringService {
 
-	public String test(@WebParam(name = "testParam") String testParam);
-	public String start();
-        public String stop();
-        
+    public String start();
+
+    public String stop();
 }

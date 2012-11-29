@@ -2,13 +2,16 @@ package tuwien.aic12.server.twitter.semantics.classifier;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import tuwien.aic12.server.twitter.semantics.documents.DocumentsSet;
@@ -56,14 +59,14 @@ public class ClassifierBuilder {
      * @throws IOException
      */
     public void prepareTrain() throws IOException {
-        _ds.createFilePreprocessed("files/train.txt", "files/train_doc.txt", opt);
-        _ds.createIndexTrain("files/train_doc.txt");
+        _ds.createFilePreprocessed("/files/train.txt", "/files/train_doc.txt", opt);
+        _ds.createIndexTrain("/files/train_doc.txt");
         if (this.opt.isSelectedFeaturesByFrequency()) {
             _ds.getFeat().selectFeaturesByFrequency(2);
         }
         ArffFileCreator fc = new ArffFileCreator();
         fc.setDs(_ds);
-        fc.createArff_train("files/train1.arff");
+        fc.createArff_train("/files/train1.arff");
     }
 
     /**
@@ -72,11 +75,11 @@ public class ClassifierBuilder {
      * @throws IOException
      */
     public void prepareTest() throws IOException {
-        _ds.createFilePreprocessed("files/test_base.txt", "files/test_doc.txt", opt);
-        _ds.createIndexTest("files/test_doc.txt");
+        _ds.createFilePreprocessed("/files/test_base.txt", "/files/test_doc.txt", opt);
+        _ds.createIndexTest("/files/test_doc.txt");
         ArffFileCreator fc = new ArffFileCreator();
         fc.setDs(_ds);
-        fc.createArff_test("files/test1.arff");
+        fc.createArff_test("/files/test1.arff");
 
     }
 
@@ -95,11 +98,25 @@ public class ClassifierBuilder {
         }
         System.out.println("inizio train");
         clas.train();
-        ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("files/" + classifier.getClass().getName() + ".model"));
+        ObjectOutputStream os = new ObjectOutputStream(createFileOutputStream(classifier));
         os.writeObject(clas);
         this.opt.setConstructedClassifier(clas);
         os.close();
+
         return clas;
+    }
+
+    public FileOutputStream createFileOutputStream(Classifier classifier) throws IOException {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("/files/" + classifier.getClass().getName() + ".model");
+        FileOutputStream out = new FileOutputStream(new File(classifier.getClass().getName() + ".model"));
+        int read = 0;
+        byte[] bytes = new byte[1024];
+        while ((read = inputStream.read(bytes)) != -1) {
+            out.write(bytes, 0, read);
+        }
+        inputStream.close();
+        out.flush();
+        return out;
     }
 
     /**
@@ -129,7 +146,7 @@ public class ClassifierBuilder {
      * @throws ClassNotFoundException
      */
     public WekaClassifier retrieveClassifier(String classifierName) throws FileNotFoundException, IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/" + classifierName + ".model"));
+        ObjectInputStream ois = new ObjectInputStream(getClass().getClassLoader().getResourceAsStream("/files/" + classifierName + ".model"));
         WekaClassifier wc = (WekaClassifier) ois.readObject();
         ois.close();
         return wc;
@@ -177,8 +194,8 @@ public class ClassifierBuilder {
         fun = new float[183];
         Preprocesser pr = new Preprocesser();
         Item temp;
-        FileInputStream fstream = new FileInputStream("files/test_base.txt");
-        DataInputStream in = new DataInputStream(fstream);
+        InputStream realPath = getClass().getClassLoader().getResourceAsStream("/files/test_base.txt");
+        DataInputStream in = new DataInputStream(realPath);
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         String strLine;
         String str, pol;

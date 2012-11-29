@@ -11,13 +11,7 @@ import tuwien.aic12.server.twitter.TwitterService;
 public class Test {
 
     public static void main(String[] args) {
-        // insertUser();
-        String subject = "Nick Diaz";
-        
-        TwitterService twitterService = new TwitterService();
-        Double result = twitterService.getOpinionOf(subject);
-        
-        System.out.println("Twitter community opinion of : " + subject + ", is : " + result);
+        // insertUser();       
     }
 
     private static void insertUser() {

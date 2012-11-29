@@ -2,8 +2,10 @@ package tuwien.aic12.server.twitter.semantics.documents;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
@@ -128,8 +130,8 @@ public class Features {
     //crea la lista di stopwords da file
     public List<String> createListStopwords() throws IOException {
         List<String> stop = new LinkedList<String>();
-        FileInputStream fstream = new FileInputStream("files/stopwords.txt");
-        DataInputStream in = new DataInputStream(fstream);
+        InputStream realPath = getClass().getClassLoader().getResourceAsStream("/files/stopwords.txt"); 
+        DataInputStream in = new DataInputStream(realPath);
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         String strLine;
         while ((strLine = br.readLine()) != null) {

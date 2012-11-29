@@ -17,22 +17,22 @@ import tuwien.aic12.server.twitter.TwitterService;
  * @author Amin
  */
 public class MonitorJob implements Runnable {
-    
+
     private Job job;
-    
+
     @Override
     public void run() {
         CustomerDao cd = new CustomerDao();
         Customer cust = cd.read(job.getCustid());
-        
+
         TwitterService twitterService = new TwitterService();
         Double result;
         Date start = new Date();
         result = twitterService.getOpinionOf(cust.getCompany_name());
-         Date end = new Date();
+        Date end = new Date();
         // Evaluation usually lasts over one minute
         long duration = end.getTime() - start.getTime();
-        
+
         RatingDao rd = new RatingDao();
         Rating rating = new Rating();
         rating.setCustomer(cust.getId());
@@ -56,7 +56,4 @@ public class MonitorJob implements Runnable {
     public void setJob(Job job) {
         this.job = job;
     }
-    
-    
-    
 }

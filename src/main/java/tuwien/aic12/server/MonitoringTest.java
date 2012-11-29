@@ -16,7 +16,7 @@ public class MonitoringTest {
 
     public static void main(String[] args) throws InterruptedException {
         JobDao jobDao = new JobDao();
-        while (1 == 1) {
+        //while(1==1) {
             //Reading registered jobs and creating new thread
 
             List<Job> jobs = jobDao.readRegisteredJobs();
@@ -26,7 +26,7 @@ public class MonitoringTest {
                 m.setJob(job);
                 m.run();
             }
-            Thread.sleep(1000);
-        }
+            Thread.sleep(10000);
+       // }
     }
 }

@@ -67,8 +67,8 @@ public class CustomerDao implements Dao<Customer> {
         Customer usr = null;
         if (!q.getResultList().isEmpty()) {
             usr = (Customer) q.getResultList().get(0);
-            usr.setToken("");
-            this.update(usr);
+            //usr.setToken("");
+            //this.update(usr);
         }
         return usr;
     }

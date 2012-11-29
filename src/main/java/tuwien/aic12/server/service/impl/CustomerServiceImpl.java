@@ -12,11 +12,12 @@ public class CustomerServiceImpl implements CustomerService {
     CustomerDao customerDao = new CustomerDao();
 
     @Override
-    public String registerCustomer(String username, String password) {
+    public String registerCustomer(String username, String password, String companyname) {
 
         Customer customer = new Customer();
         customer.setPassword(username);
         customer.setUsername(password);
+        customer.setCompany_name(companyname);
         //DBManager.getInstance().getEntityManager().getTransaction().begin();
         customer = customerDao.create(customer);
         //DBManager.getInstance().getEntityManager().getTransaction().commit();

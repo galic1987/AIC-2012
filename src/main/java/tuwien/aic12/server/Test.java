@@ -16,8 +16,8 @@ public class Test {
 
     private static void insertUser() {
         Customer customer = new Customer();
-        customer.setPassword("123");
-        customer.setUsername("123");
+        customer.setPassword("test 2");
+        customer.setUsername("test 2");
 
         CustomerDao customerDao = new CustomerDao();
         customerDao.create(customer);

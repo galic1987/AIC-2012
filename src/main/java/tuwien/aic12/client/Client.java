@@ -5,6 +5,7 @@ import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPBinding;
 import tuwien.aic12.server.service.AnalyserService;
 import tuwien.aic12.server.service.CustomerService;
+import tuwien.aic12.server.service.QueryService;
 
 public final class Client {
 
@@ -41,7 +42,7 @@ public final class Client {
         service.addPort(SERVICE_CUSTOMER_PORT, SOAPBinding.SOAP11HTTP_BINDING, endpointAddress);
 
         CustomerService customerService = service.getPort(CustomerService.class);
-        System.out.println(customerService.registerCustomer("test1", "test1"));
+        System.out.println(customerService.registerCustomer("test1", "test1", "Google"));
         String token = customerService.login("test1", "test1");
         System.out.println(token);
         System.out.println(customerService.logout(token));

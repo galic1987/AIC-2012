@@ -37,7 +37,7 @@ public final class Client {
         
         Service service = Service.create(SERVICE_CUSTOMER);
         // Endpoint Address
-        String endpointAddress = "http://localhost:8080/aic12/CustomerService";
+        String endpointAddress = "http://localhost:8084/aic12/CustomerService";
         // Add a port to the Service
         service.addPort(SERVICE_CUSTOMER_PORT, SOAPBinding.SOAP11HTTP_BINDING, endpointAddress);
 
@@ -55,7 +55,7 @@ public final class Client {
 
         Service service = Service.create(SERVICE_ANALYSER);
         // Endpoint Address
-        String endpointAddress = "http://localhost:8080/aic12/AnalyserService";
+        String endpointAddress = "http://localhost:8084/aic12/AnalyserService";
         // Add a port to the Service
         service.addPort(SERVICE_ANALYSER_PORT, SOAPBinding.SOAP11HTTP_BINDING, endpointAddress);
 

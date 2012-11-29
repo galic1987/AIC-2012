@@ -28,7 +28,7 @@ public class MonitorJob implements Runnable {
         
         Service monitorService = Service.create(SERVICE_SEARCH);
         // Endpoint Address
-        String endpointSearchService = "http://localhost:8084/aic12/monitoringService";
+        String endpointSearchService = "http://localhost:8084/aic12/MonitoringService";
         // Add a port to the Service
         monitorService.addPort(MONITOR_SERVICE_PORT, SOAPBinding.SOAP11HTTP_BINDING, endpointSearchService);
         

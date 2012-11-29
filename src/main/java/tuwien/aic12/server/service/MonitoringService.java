@@ -5,8 +5,7 @@ import javax.jws.WebService;
 
 @WebService//(name = "MonitoringService", portName="MonitoringServicePort")
 public interface MonitoringService {
-
-    public String start();
-
-    public String stop();
+	public String analyse(@WebParam(name = "customerid") long customerid, @WebParam(name = "jobid") long jobid);
+        public String stop();
+        
 }

@@ -3,9 +3,14 @@ package tuwien.aic12.model;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -18,18 +23,21 @@ public class Job implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name = "date_from")
+    @Column(name = "subject")
+    private String subject;
+    @Column(name = "dateFrom")
     private String dateFrom;
-    @Column(name = "date_to")
+    @Column(name = "dateTo")
     private String dateTo;
-    @Column(name = "intervl")
-    private Double intervl;
     @Column(name = "registred")
     private Boolean registred;
-    @Column(name = "custid")
-    private Long custid;
-    @Column(name = "status")
-    private Integer status;
+    @Column(name = "jobStatus")
+    @Enumerated(EnumType.STRING)
+    private JobStatus jobStatus;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Customer customer;
+    @OneToOne(fetch = FetchType.EAGER)
+    private Rating rating;
 
     public Job() {
     }
@@ -57,13 +65,7 @@ public class Job implements Serializable {
     public void setDateTo(String dateTo) {
         this.dateTo = dateTo;
     }
-    public Double getInterval() {
-        return intervl;
-    }
 
-    public void setInterval(Double interval) {
-        this.intervl = interval;
-    }
     public Boolean getRegistred() {
         return registred;
     }
@@ -72,25 +74,35 @@ public class Job implements Serializable {
         this.registred = registred;
     }
 
-    /**
-     * @return the custid
-     */
-    public Long getCustid() {
-        return custid;
+    public String getSubject() {
+        return subject;
     }
 
-    /**
-     * @param custid the custid to set
-     */
-    public void setCustid(Long custid) {
-        this.custid = custid;
-    }
-    
-    public Integer getStatus() {
-        return status;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public JobStatus getJobStatus() {
+        return jobStatus;
+    }
+
+    public void setJobStatus(JobStatus jobStatus) {
+        this.jobStatus = jobStatus;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Rating getRating() {
+        return rating;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
     }
 }

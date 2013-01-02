@@ -3,7 +3,7 @@ package tuwien.aic12.server.service;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-@WebService//(name = "AnalyserService", portName = "AnalyserServicePort")
+@WebService
 public interface AnalyserService {
 
     public String analyseFromTo(@WebParam(name = "subject") String subject,

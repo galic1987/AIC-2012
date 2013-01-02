@@ -45,7 +45,7 @@ public class JobDao implements Dao<Job> {
     public Job read(long id) {
         return em.find(Job.class, id);
     }
-    
+
     public List<Job> readRegisteredJobs() {
         Query q = em.createQuery("SELECT j FROM job j WHERE j.registred = 'true';");
         List jobs = q.getResultList();

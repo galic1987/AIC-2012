@@ -2,7 +2,7 @@ package tuwien.aic12.server.dao;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import tuwien.aic12.model.Customer;
@@ -55,20 +55,18 @@ public class CustomerDao implements Dao<Customer> {
         if (!q.getResultList().isEmpty()) {
             usr = (Customer) q.getResultList().get(0);
             usr.setToken(nextSessionId());
-            usr.setLastlogintime(new Timestamp(new java.util.Date().getTime()));
+            usr.setLastLoginTime(new Date());
             this.update(usr);
         }
         return usr;
     }
 
-    public Customer findCustomerByToken(Customer customer) {
-        System.out.println("token to find:" + customer.getToken());
-        Query q = em.createQuery("SELECT u FROM customer u WHERE u.token = '" + customer.getToken() + "'");
+    public Customer findCustomerByToken(String token) {
+        System.out.println("token to find:" + token);
+        Query q = em.createQuery("SELECT u FROM customer u WHERE u.token = '" + token + "'");
         Customer usr = null;
         if (!q.getResultList().isEmpty()) {
             usr = (Customer) q.getResultList().get(0);
-            //usr.setToken("");
-            //this.update(usr);
         }
         return usr;
     }

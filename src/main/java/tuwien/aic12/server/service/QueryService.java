@@ -3,7 +3,7 @@ package tuwien.aic12.server.service;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-@WebService//(name = "QueryService", portName="QueryServicePort")
+@WebService
 public interface QueryService {
 
     public String search(

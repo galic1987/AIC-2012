@@ -40,9 +40,9 @@ public class TwitterSearcher {
         }
         return result;
     }
-    
+
     // Dates have to be formatted as : YYYY-MM-DD
-     public List<Tweet> createTwitterQuerySinceUntil(String searchObject, String since, String until) {
+    public List<Tweet> createTwitterQuerySinceUntil(String searchObject, String since, String until) {
         Query query = new Query(searchObject);
         query.setSince(since);
         query.setUntil(until);

@@ -19,7 +19,7 @@ import weka.classifiers.bayes.NaiveBayes;
  */
 public class TwitterSemantics {
 
-    private DecimalFormat decimalFormat = new DecimalFormat("#.##");
+    private DecimalFormat decimalFormat = new DecimalFormat("#,##");
 
     public Double analyse(List<Tweet> tweets) {
         Double aMiddle = 0.0;
@@ -32,7 +32,7 @@ public class TwitterSemantics {
         // rimuove le emoticons
         opt.setRemoveEmoticons(true);
         List<String> results = new ArrayList<String>();
-        List<Double> convertedResults = new ArrayList<Double>();
+        List<Double> convertedResults;
         try {
             //prepara le strutture dati per il train e il test
             clb.prepareTrain();

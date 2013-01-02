@@ -58,7 +58,7 @@ public class ExecutorThread extends Thread {
         } catch (MessagingException ex) {
             Logger.getLogger(ExecutorThread.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         this.interrupt();
     }
 }

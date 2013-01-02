@@ -8,14 +8,13 @@ import tuwien.aic12.server.dao.RatingDao;
 import tuwien.aic12.server.service.BillingService;
 
 public class BillingServiceImpl implements BillingService {
+    
+    CustomerDao customerDao = new CustomerDao();
 
     @Override
     public double getBill(String token) {
-        double price = 0.0;
-        CustomerDao customerDao = new CustomerDao();
-        Customer customer = new Customer();
-        customer.setToken(token);
-        customer = customerDao.findCustomerByToken(customer);
+        double price = 0.0;        
+        Customer customer = customerDao.findCustomerByToken(token);
         RatingDao rd = new RatingDao();
         List<Rating> list_rating = rd.findRatingsByCustomer(customer.getId());
         for (Rating rating : list_rating) {
@@ -36,14 +35,11 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     public String payBill(String token) {
-        CustomerDao customerDao = new CustomerDao();
-        Customer customer = new Customer();
-        customer.setToken(token);
-        customer = customerDao.findCustomerByToken(customer);
+        Customer customer = customerDao.findCustomerByToken(token);
         RatingDao rd = new RatingDao();
         List<Rating> list_rating = rd.findRatingsByCustomer(customer.getId());
         for (Rating rating : list_rating) {
-            rating.setFee(0);
+            rating.setFee(0.0);
             rating.setDuration((long) 0);
         }
         return "Bill payed!";

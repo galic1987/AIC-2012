@@ -15,26 +15,26 @@ import tuwien.aic12.server.service.*;
  * @author Amin
  */
 public class MonitorJob implements Runnable {
-    
+
     private Job job;
     private String SERVER_HOME = "http://service.server.aic12.tuwien/";
     private QName SERVICE_SEARCH = new QName(SERVER_HOME,
             "MonitoringService");
     private QName MONITOR_SERVICE_PORT = new QName(SERVER_HOME,
             "MonitoringServicePort");
-    
+
     @Override
     public void run() {
-        
+
         Service monitorService = Service.create(SERVICE_SEARCH);
         // Endpoint Address
         String endpointSearchService = "http://localhost:8084/aic12/MonitoringService";
         // Add a port to the Service
         monitorService.addPort(MONITOR_SERVICE_PORT, SOAPBinding.SOAP11HTTP_BINDING, endpointSearchService);
-        
+
         MonitoringService monitorServiceImpl = monitorService.getPort(MonitoringService.class);
-        monitorServiceImpl.analyse(job.getCustid(), job.getId());
-        
+        monitorServiceImpl.analyse(job.getCustomer().getEmail(), job.getId());
+
 //        CustomerDao cd = new CustomerDao();
 //        Customer cust = cd.read(job.getCustid());
 //        
@@ -69,7 +69,4 @@ public class MonitorJob implements Runnable {
     public void setJob(Job job) {
         this.job = job;
     }
-    
-    
-    
 }

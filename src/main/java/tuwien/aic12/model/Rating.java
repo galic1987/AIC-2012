@@ -1,12 +1,16 @@
 package tuwien.aic12.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -19,18 +23,20 @@ public class Rating implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name = "customer")
-    private Long customer;
-    @Column(name = "job")
-    private Long job;
+    @OneToOne(fetch = FetchType.EAGER)
+    private Job job;
     @Column(name = "rating")
-    private double rating;
-    @Column(name = "fee")
-    private double fee;
-    @Column(name = "ts")
-    private Timestamp ts;
+    private Double rating;
     @Column(name = "duration")
     private Long duration;
+    @Column(name = "ratingStart")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date ratingStart;
+    @Column(name = "ratingEnd")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date ratingEnd;
+    @Column(name = "fee")
+    private Double fee;
 
     public Rating() {
     }
@@ -43,68 +49,51 @@ public class Rating implements Serializable {
         this.id = id;
     }
 
-    /**
-     * @return the job
-     */
-    public Long getJob() {
-        return job;
-    }
-
-    /**
-     * @param job the job to set
-     */
-    public void setJob(Long job) {
-        this.job = job;
-    }
-
-    /**
-     * @return the rating
-     */
-    public double getRating() {
-        return rating;
-    }
-
-    /**
-     * @param rating the rating to set
-     */
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    /**
-     * @return the fee
-     */
-    public double getFee() {
-        return fee;
-    }
-
-    /**
-     * @param fee the fee to set
-     */
-    public void setFee(double fee) {
-        this.fee = fee;
-    }
-
-    public Long getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Long customer) {
-        this.customer = customer;
-    }
-
-    public Timestamp getTs() {
-        return ts;
-    }
-
-    public void setTs(Timestamp ts) {
-        this.ts = ts;
-    }
     public Long getDuration() {
         return duration;
     }
 
     public void setDuration(Long duration) {
         this.duration = duration;
+    }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public Date getRatingStart() {
+        return ratingStart;
+    }
+
+    public void setRatingStart(Date ratingStart) {
+        this.ratingStart = ratingStart;
+    }
+
+    public Date getRatingEnd() {
+        return ratingEnd;
+    }
+
+    public void setRatingEnd(Date ratingEnd) {
+        this.ratingEnd = ratingEnd;
+    }
+
+    public Double getFee() {
+        return fee;
+    }
+
+    public void setFee(Double fee) {
+        this.fee = fee;
     }
 }

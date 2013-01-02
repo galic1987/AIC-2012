@@ -29,12 +29,12 @@ public final class Client {
     public static void main(String args[]) throws Exception {
         // customerServiceTest();
         analyserTest();
-        
+
     }
 
     private static void customerServiceTest() {
         System.out.println("\n\n\n CustomerService Test\n\n\n");
-        
+
         Service service = Service.create(SERVICE_CUSTOMER);
         // Endpoint Address
         String endpointAddress = "http://localhost:8084/aic12/CustomerService";
@@ -46,7 +46,7 @@ public final class Client {
         String token = customerService.login("test1", "test1");
         System.out.println(token);
         System.out.println(customerService.logout(token));
-        
+
         System.out.println("\n\n\nCustomerService Test Finished.\n\n\n");
     }
 

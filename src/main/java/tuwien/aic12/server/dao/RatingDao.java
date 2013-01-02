@@ -45,16 +45,18 @@ public class RatingDao implements Dao<Rating> {
     public Rating read(long id) {
         return em.find(Rating.class, id);
     }
-    
+
     public List<Rating> findRatings(String dateFrom, String dateTo, long custId, long jobId) {
         Query q = em.createQuery("SELECT r FROM rating r WHERE r.ts >= '" + dateFrom + "' AND r.ts <= '" + dateTo + "' AND r.job= '" + jobId + "' AND r.customer='" + custId + "'");
-        return q.getResultList();   
+        return q.getResultList();
     }
-    public List<Rating> findRatingsByCustomer(long custId){
+
+    public List<Rating> findRatingsByCustomer(long custId) {
         Query q = em.createQuery("SELECT r FROM rating r WHERE r.customer='" + custId + "'");
         return q.getResultList();
     }
-    public Rating findRatingById(long ratingId){
+
+    public Rating findRatingById(long ratingId) {
         Query q = em.createQuery("SELECT r FROM rating r WHERE r.id='" + ratingId + "'");
         return (Rating) q.getResultList().get(0);
     }

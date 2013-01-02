@@ -2,11 +2,18 @@ package tuwien.aic12.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -23,16 +30,19 @@ public class Customer implements Serializable {
     private String username;
     @Column(name = "password")
     private String password;
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
-    @Column(name = "kontonummer")
-    private int kontonummer;
-    @Column(name = "company_name")
-    private String company_name;
+    @Column(name = "accountNo")
+    private int accountNo;
+    @Column(name = "company")
+    private String company;
     @Column(name = "token")
     private String token;
-    @Column(name = "lastlogintime")
-    private Timestamp lastlogintime;
+    @Column(name = "lastLoginTime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastLoginTime;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private ArrayList<Job> jobs = new ArrayList<Job>();
 
     public Customer() {
     }
@@ -61,73 +71,51 @@ public class Customer implements Serializable {
         this.password = password;
     }
 
-    /**
-     * @return the email
-     */
     public String getEmail() {
         return email;
     }
 
-    /**
-     * @param email the email to set
-     */
     public void setEmail(String email) {
         this.email = email;
     }
 
-    /**
-     * @return the kontonummer
-     */
-    public int getKontonummer() {
-        return kontonummer;
-    }
-
-    /**
-     * @param kontonummer the kontonummer to set
-     */
-    public void setKontonummer(int kontonummer) {
-        this.kontonummer = kontonummer;
-    }
-
-    /**
-     * @return the company_name
-     */
-    public String getCompany_name() {
-        return company_name;
-    }
-
-    /**
-     * @param company_name the company_name to set
-     */
-    public void setCompany_name(String company_name) {
-        this.company_name = company_name;
-    }
-
-    /**
-     * @return the token
-     */
     public String getToken() {
         return token;
     }
 
-    /**
-     * @param token the token to set
-     */
     public void setToken(String token) {
         this.token = token;
     }
 
-    /**
-     * @return the lastlogintime
-     */
-    public Timestamp getLastlogintime() {
-        return lastlogintime;
+    public String getCompany() {
+        return company;
     }
 
-    /**
-     * @param lastlogintime the lastlogintime to set
-     */
-    public void setLastlogintime(Timestamp lastlogintime) {
-        this.lastlogintime = lastlogintime;
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public int getAccountNo() {
+        return accountNo;
+    }
+
+    public void setAccountNo(int accountNo) {
+        this.accountNo = accountNo;
+    }
+
+    public ArrayList<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(ArrayList<Job> jobs) {
+        this.jobs = jobs;
     }
 }

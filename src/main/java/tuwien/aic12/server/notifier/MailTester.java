@@ -11,7 +11,7 @@ import javax.mail.MessagingException;
  */
 public class MailTester {
 
-    public static void main(String[] args) {       
+    public static void main(String[] args) {
         MailSender ms = new MailSender();
         try {
             ms.postMail("Bruce Lee", "vanja.bisanovic@gmail.com", "blah, blah, blah, blah", "Twitter Analysis Report");

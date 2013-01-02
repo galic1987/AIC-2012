@@ -20,8 +20,8 @@ import tuwien.aic12.server.service.QueryService;
  * @author amin
  */
 public class MonitoringTest {
-    
-   private static final String SERVER_HOME = "http://service.server.aic12.tuwien/";
+
+    private static final String SERVER_HOME = "http://service.server.aic12.tuwien/";
     private static final QName SERVICE_CUSTOMER = new QName(SERVER_HOME,
             "CustomerService");
     private static final QName SERVICE_CUSTOMER_PORT = new QName(SERVER_HOME,
@@ -30,11 +30,11 @@ public class MonitoringTest {
             "QueryService");
     private static final QName SERVICE_SEARCH_PORT = new QName(SERVER_HOME,
             "QueryServicePort");
-    
+
     public static void main(String[] args) throws InterruptedException {
         JobDao jobDao = new JobDao();
         insertUser();
-        while(1==1) {
+        while (1 == 1) {
             //Reading registered jobs and creating new thread
 
             List<Job> jobs = jobDao.readRegisteredJobs();
@@ -47,7 +47,7 @@ public class MonitoringTest {
             Thread.sleep(10000);
         }
     }
-    
+
     private static void insertUser() {
         Service service = Service.create(SERVICE_CUSTOMER);
         Service searchService = Service.create(SERVICE_SEARCH);

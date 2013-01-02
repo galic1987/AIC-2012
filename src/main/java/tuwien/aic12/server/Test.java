@@ -2,7 +2,6 @@ package tuwien.aic12.server;
 
 import tuwien.aic12.model.Customer;
 import tuwien.aic12.server.dao.CustomerDao;
-import tuwien.aic12.server.twitter.TwitterService;
 
 /**
  *
@@ -11,7 +10,7 @@ import tuwien.aic12.server.twitter.TwitterService;
 public class Test {
 
     public static void main(String[] args) {
-        // insertUser();       
+       insertUser();       
     }
 
     private static void insertUser() {

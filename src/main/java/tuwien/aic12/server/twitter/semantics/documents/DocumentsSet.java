@@ -3,7 +3,6 @@ package tuwien.aic12.server.twitter.semantics.documents;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -121,7 +120,7 @@ public class DocumentsSet {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path);
             String[] split = path.split("/");
             out = new FileOutputStream(new File(split[split.length - 1]));
-            int read = 0;
+            int read;
             byte[] bytes = new byte[1024];
             while ((read = inputStream.read(bytes)) != -1) {
                 out.write(bytes, 0, read);

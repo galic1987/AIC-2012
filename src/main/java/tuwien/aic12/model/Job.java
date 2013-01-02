@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -35,8 +36,10 @@ public class Job implements Serializable {
     @Enumerated(EnumType.STRING)
     private JobStatus jobStatus;
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "jobId", referencedColumnName = "id")
     private Customer customer;
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(referencedColumnName="id", name="ratingId")
     private Rating rating;
 
     public Job() {

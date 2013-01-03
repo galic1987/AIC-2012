@@ -2,10 +2,13 @@ package tuwien.aic12.server.dao;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import tuwien.aic12.model.Customer;
+import tuwien.aic12.server.Constants;
 
 /**
  *
@@ -21,7 +24,7 @@ public class CustomerDao implements Dao<Customer> {
     }
 
     @Override
-    public Customer create(Customer t) {
+    public Customer create(Customer t) throws Exception {
         em.getTransaction().begin();
         em.persist(t);
         em.getTransaction().commit();
@@ -50,6 +53,7 @@ public class CustomerDao implements Dao<Customer> {
     }
 
     public Customer find(Customer customer) {
+        Constants.logger.log(Level.FINE, "QUERY : \"SELECT u FROM customer u WHERE u.username = '\" + customer.getUsername() + \"' and u.password = '\" + customer.getPassword() + \"';\"");
         Query q = em.createQuery("SELECT u FROM customer u WHERE u.username = '" + customer.getUsername() + "' and u.password = '" + customer.getPassword() + "';");
         Customer usr = null;
         if (!q.getResultList().isEmpty()) {
@@ -59,6 +63,15 @@ public class CustomerDao implements Dao<Customer> {
             this.update(usr);
         }
         return usr;
+    }
+
+    public String find(String username, String password) {
+        Query q = em.createQuery("SELECT u FROM customer u WHERE u.username = '" + username + "';");
+        if (!q.getResultList().isEmpty()) {
+            return "Username already in use";
+        } else {
+            return "";
+        }
     }
 
     public Customer findCustomerByToken(String token) {
@@ -71,6 +84,15 @@ public class CustomerDao implements Dao<Customer> {
         return usr;
     }
 
+     public Customer findCustomerByCompany(String company) {
+        Query q = em.createQuery("SELECT u FROM customer u WHERE u.company = '" + company + "'");
+        Customer usr = null;
+        if (!q.getResultList().isEmpty()) {
+            usr = (Customer) q.getResultList().get(0);
+        }
+        return usr;
+    }
+    
     public String nextSessionId() {
         return new BigInteger(130, random).toString(32);
     }

@@ -30,19 +30,28 @@ public class Job implements Serializable {
     private String dateFrom;
     @Column(name = "dateTo")
     private String dateTo;
-    @Column(name = "registred")
-    private Boolean registred;
     @Column(name = "jobStatus")
     @Enumerated(EnumType.STRING)
     private JobStatus jobStatus;
+    @Column(name = "jobPayedStatus")
+    @Enumerated(EnumType.STRING)
+    private JobPayedStatus jobPayedStatus;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "jobId", referencedColumnName = "id")
     private Customer customer;
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(referencedColumnName="id", name="ratingId")
+    @JoinColumn(referencedColumnName = "id", name = "ratingId")
     private Rating rating;
 
     public Job() {
+    }
+
+    public JobPayedStatus getJobPayedStatus() {
+        return jobPayedStatus;
+    }
+
+    public void setJobPayedStatus(JobPayedStatus jobPayedStatus) {
+        this.jobPayedStatus = jobPayedStatus;
     }
 
     public Long getId() {
@@ -67,14 +76,6 @@ public class Job implements Serializable {
 
     public void setDateTo(String dateTo) {
         this.dateTo = dateTo;
-    }
-
-    public Boolean getRegistred() {
-        return registred;
-    }
-
-    public void setRegistred(Boolean registred) {
-        this.registred = registred;
     }
 
     public String getSubject() {

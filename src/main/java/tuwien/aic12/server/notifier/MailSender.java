@@ -1,8 +1,10 @@
 package tuwien.aic12.server.notifier;
 
 import java.util.*;
+import java.util.logging.Level;
 import javax.mail.*;
 import javax.mail.internet.*;
+import tuwien.aic12.server.Constants;
 
 /**
  *
@@ -22,19 +24,19 @@ public class MailSender {
                 new javax.mail.Authenticator() {
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("vanja.bisanovic", "VANJAasdfghjkl");
+                        return new PasswordAuthentication("nikola.nepostojeci", "zaq1xsw2cde3vfr4");
                     }
                 });
         try {
             Message messageToBeSent = new MimeMessage(session);
-            messageToBeSent.setFrom(new InternetAddress("vanja.bisanovic@gmail.com"));
+            messageToBeSent.setFrom(new InternetAddress("nikola.nepostojeci@gmail.com"));
             messageToBeSent.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(recieverAddress));
             messageToBeSent.setSubject(subject);
             messageToBeSent.setText("Dear " + recieverName + ","
                     + "\n\n" + emailContent);
             Transport.send(messageToBeSent);
-            System.out.println("MailSender : Mail sent to " + recieverAddress);
+            Constants.logger.log(Level.FINE, "MailSender : Mail sent to " + recieverAddress);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

@@ -4,12 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,10 +21,7 @@ public class Rating implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(referencedColumnName="id", name="jobId")
-    private Job job;
+    private Long id;   
     @Column(name = "rating")
     private Double rating;
     @Column(name = "duration")
@@ -57,14 +52,6 @@ public class Rating implements Serializable {
 
     public void setDuration(Long duration) {
         this.duration = duration;
-    }
-
-    public Job getJob() {
-        return job;
-    }
-
-    public void setJob(Job job) {
-        this.job = job;
     }
 
     public Double getRating() {

@@ -18,7 +18,7 @@ public class JobDao implements Dao<Job> {
     }
 
     @Override
-    public Job create(Job t) {
+    public Job create(Job t) throws Exception {
         em.getTransaction().begin();
         em.persist(t);
         em.getTransaction().commit();

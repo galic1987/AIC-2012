@@ -10,7 +10,7 @@ package tuwien.aic12.server.dao;
  */
 public interface Dao<T> {
 
-    public T create(T t);
+    public T create(T t) throws Exception;
 
     public T update(T t);
 

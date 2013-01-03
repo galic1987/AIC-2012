@@ -1,7 +1,6 @@
 package tuwien.aic12.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.persistence.CascadeType;
@@ -12,10 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -28,15 +27,22 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
     @Column(name = "password")
     private String password;
+    @Column(name = "registred")
+    private Boolean registred = false;
+    @Column(name = "registerTime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date registerTime;
+    @Column(name = "registerDuration")
+    private Long registerDuration;
     @Column(name = "email", unique = true)
     private String email;
     @Column(name = "accountNo")
     private int accountNo;
-    @Column(name = "company")
+    @Column(name = "company", unique = true)
     private String company;
     @Column(name = "token")
     private String token;
@@ -50,12 +56,36 @@ public class Customer implements Serializable {
     public Customer() {
     }
 
+    public Long getRegisterDuration() {
+        return registerDuration;
+    }
+
+    public void setRegisterDuration(Long registerDuration) {
+        this.registerDuration = registerDuration;
+    }
+
+    public Date getRegisterTime() {
+        return registerTime;
+    }
+
+    public void setRegisterTime(Date registerTime) {
+        this.registerTime = registerTime;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean getRegistred() {
+        return registred;
+    }
+
+    public void setRegistred(Boolean registred) {
+        this.registred = registred;
     }
 
     public String getUsername() {
@@ -120,5 +150,29 @@ public class Customer implements Serializable {
 
     public void setJobs(ArrayList<Job> jobs) {
         this.jobs = jobs;
+    }
+
+    @Transient
+    public Job getJob(Long id) {
+        for (Job job : jobs) {
+            if (job.getId().equals(id)) {
+                return job;
+            }
+        }
+        return null;
+    }
+
+    @Transient
+    public void replaceJob(Job job) {
+        Job toDelete = null;
+        for (Job jobTmp : jobs) {
+            if (job.getId().equals(job.getId())) {
+                toDelete = jobTmp;
+            }
+        }
+        if (toDelete != null) {
+            jobs.remove(toDelete);
+        }
+        jobs.add(job);
     }
 }

@@ -21,7 +21,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setPassword(password);
         customer = customerDao.find(customer);
         if (customer != null) {
-            Constants.logger.log(Level.FINE, "User : {0}, with token : {1}, just logged in.", new Object[]{customer.getId(), customer.getToken()});
+            Constants.logger.log(Level.INFO, "User : {0}, with token : {1}, just logged in.", new Object[]{customer.getId(), customer.getToken()});
             return customer.getToken().toString();
         } else {
             return CUSTOMER_NOT_FOUND;
@@ -32,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
     public String logout(String token) {
         Customer customer = customerDao.findCustomerByToken(token);
         if (customer != null) {
-            Constants.logger.log(Level.FINE, "{0} logged out", customer.getId());
+            Constants.logger.log(Level.INFO, "{0} logged out", customer.getId());
             return LOGOUT_SUCCESS;
         } else {
             return TOKEN_INVALID;
@@ -48,10 +48,10 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setRegisterDuration(registerDuration);
             try {
                 customer = customerDao.update(customer);
-                Constants.logger.log(Level.FINE, customer.getUsername() + " registered.");
+                Constants.logger.log(Level.INFO, "{0} registered.", customer.getUsername());
                 return "Register was successful. Please log in to continue...";
             } catch (Exception ex) {
-                Constants.logger.log(Level.FINE, ex.getLocalizedMessage());
+                Constants.logger.log(Level.INFO, ex.getLocalizedMessage());
                 return "Invalid Register Data. Please fill out all the required fields.";
             }
         } else {
@@ -74,10 +74,10 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setRegistred(Boolean.TRUE);
             try {
                 customer = customerDao.create(customer);
-                Constants.logger.log(Level.FINE, customer.getUsername() + " registered.");
+                Constants.logger.log(Level.INFO, "{0} registered.", customer.getUsername());
                 return "Register was successful. Please log in to continue...";
             } catch (Exception ex) {
-                Constants.logger.log(Level.FINE, ex.getLocalizedMessage());
+                Constants.logger.log(Level.INFO, ex.getLocalizedMessage());
                 return "Invalid Register Data. Please fill out all the required fields.";
             }
         } else {

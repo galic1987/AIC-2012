@@ -28,7 +28,7 @@ public class JobDao implements Dao<Job> {
     @Override
     public Job update(Job t) {
         em.getTransaction().begin();
-        em.merge(t);
+        t = em.merge(t);
         em.getTransaction().commit();
         return t;
     }

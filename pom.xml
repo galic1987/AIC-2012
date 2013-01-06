@@ -386,5 +386,7 @@
             <name>Repository for library EclipseLink (JPA 2.0)</name>
         </repository>
     </repositories>
-    <properties></properties>
+    <properties>
+        <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
+    </properties>
 </project>

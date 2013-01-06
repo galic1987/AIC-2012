@@ -2,7 +2,6 @@ package tuwien.aic12.server.dao;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.Level;
 import javax.persistence.EntityManager;
@@ -75,7 +74,7 @@ public class CustomerDao implements Dao<Customer> {
     }
 
     public Customer findCustomerByToken(String token) {
-        System.out.println("token to find:" + token);
+        Constants.logger.log(Level.FINE, "Sewarching for customer with token : {0}", token);
         Query q = em.createQuery("SELECT u FROM customer u WHERE u.token = '" + token + "'");
         Customer usr = null;
         if (!q.getResultList().isEmpty()) {

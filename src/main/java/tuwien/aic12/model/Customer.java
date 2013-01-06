@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 /**
  *
@@ -50,7 +49,6 @@ public class Customer implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastLoginTime;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "customerId", referencedColumnName = "id")
     private ArrayList<Job> jobs = new ArrayList<Job>();
 
     public Customer() {
@@ -152,27 +150,4 @@ public class Customer implements Serializable {
         this.jobs = jobs;
     }
 
-    @Transient
-    public Job getJob(Long id) {
-        for (Job job : jobs) {
-            if (job.getId().equals(id)) {
-                return job;
-            }
-        }
-        return null;
-    }
-
-    @Transient
-    public void replaceJob(Job job) {
-        Job toDelete = null;
-        for (Job jobTmp : jobs) {
-            if (job.getId().equals(job.getId())) {
-                toDelete = jobTmp;
-            }
-        }
-        if (toDelete != null) {
-            jobs.remove(toDelete);
-        }
-        jobs.add(job);
-    }
 }

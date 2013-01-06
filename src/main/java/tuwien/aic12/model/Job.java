@@ -36,8 +36,8 @@ public class Job implements Serializable {
     @Column(name = "jobPayedStatus")
     @Enumerated(EnumType.STRING)
     private JobPayedStatus jobPayedStatus;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "jobId", referencedColumnName = "id")
+    @JoinColumn(name = "customerId")
+    @ManyToOne(fetch = FetchType.EAGER)    
     private Customer customer;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(referencedColumnName = "id", name = "ratingId")

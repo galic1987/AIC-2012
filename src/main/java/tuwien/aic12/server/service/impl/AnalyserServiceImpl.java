@@ -1,7 +1,10 @@
 package tuwien.aic12.server.service.impl;
 
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebService;
+import javax.mail.MessagingException;
 import tuwien.aic12.model.Customer;
 import tuwien.aic12.model.Job;
 import tuwien.aic12.model.JobPayedStatus;
@@ -9,7 +12,11 @@ import tuwien.aic12.model.JobStatus;
 import tuwien.aic12.model.Rating;
 import tuwien.aic12.server.Constants;
 import tuwien.aic12.server.dao.CustomerDao;
+import tuwien.aic12.server.dao.JobDao;
+import tuwien.aic12.server.notifier.MailSender;
 import tuwien.aic12.server.service.AnalyserService;
+import tuwien.aic12.server.twitter.TwitterService;
+import tuwien.aic12.server.util.StringUtil;
 
 /**
  *
@@ -19,6 +26,7 @@ import tuwien.aic12.server.service.AnalyserService;
 public class AnalyserServiceImpl implements AnalyserService {
 
     private CustomerDao customerDao = new CustomerDao();
+    private JobDao jobDao = new JobDao();
 
     @Override
     public String analyseFromTo(String subject, String from, String to, String token) {
@@ -38,6 +46,7 @@ public class AnalyserServiceImpl implements AnalyserService {
                     rating.setRatingStart(new Date());
                     rating.setFee(Constants.requestFee);
                     job.setRating(rating);
+                    job = jobDao.update(job);
                     customer.getJobs().add(job);
                     customerDao.update(customer);
 
@@ -67,10 +76,11 @@ public class AnalyserServiceImpl implements AnalyserService {
     public String analyse(String subject, String token) {
         Customer customer = customerDao.findCustomerByToken(token);
         if (customer != null) {
+            
+            
+            
             if (customer.getRegistred() == true) {
                 if ((new Date().getTime() - customer.getRegisterTime().getTime()) <= customer.getRegisterDuration()) {
-
-
                     Job job = new Job();
                     job.setCustomer(customer);
                     job.setJobPayedStatus(JobPayedStatus.UNPAYED);
@@ -78,8 +88,9 @@ public class AnalyserServiceImpl implements AnalyserService {
                     job.setSubject(subject);
                     Rating rating = new Rating();
                     rating.setRatingStart(new Date());
-                    rating.setFee(Constants.requestFee);                    
+                    rating.setFee(Constants.requestFee);
                     job.setRating(rating);
+                    job = jobDao.update(job);
                     customer.getJobs().add(job);
                     customerDao.update(customer);
 
@@ -102,6 +113,69 @@ public class AnalyserServiceImpl implements AnalyserService {
             }
         } else {
             return "Invalid request...";
+        }
+    }
+
+    public class ExecutorThread extends Thread {
+
+        private String subject;
+        private String from;
+        private String to;
+        private String email;
+        private String reciever;
+        private TwitterService twitterService = new TwitterService();
+        private MailSender mailSender = new MailSender();
+        private StringUtil stringUtil = new StringUtil();
+        private JobDao jobDao = new JobDao();
+        private Job job;
+
+        public ExecutorThread(String subject, String email, String reciever, Customer customer, Job job) {
+            this.subject = subject;
+            this.email = email;
+            this.reciever = reciever;
+            this.job = job;
+        }
+
+        public ExecutorThread(String subject, String from, String to, String email, String reciever, Customer customer, Job job) {
+            this.subject = subject;
+            this.from = from;
+            this.to = to;
+            this.email = email;
+            this.reciever = reciever;
+            this.job = job;
+        }
+
+        @Override
+        public void run() {
+            try {
+                job.setJobStatus(JobStatus.RUNNING);
+                jobDao.update(job);
+                Double result;
+                String emailContent;
+                if (stringUtil.isNotEmpty(from) || stringUtil.isNotEmpty(to)) {
+                    result = twitterService.getOpinionOfFromTo(subject, from, to);
+                    if (!stringUtil.isNotEmpty(from)) {
+                        from = "some time ago";
+                    }
+                    if (!stringUtil.isNotEmpty(to)) {
+                        to = "today";
+                    }
+                    emailContent = "Twitter community opinion of : " + subject + ", in time period since " + from + " until " + to + ", is : " + result;
+                } else {
+                    result = twitterService.getOpinionOf(subject);
+                    emailContent = "Twitter community opinion of : " + subject + ", is : " + result;
+                }
+                mailSender.postMail(reciever, email, emailContent, "Tweets Analysis Report");
+                Date end = new Date();
+                job.setJobStatus(JobStatus.FINISHED);
+                job.getRating().setRatingEnd(end);
+                job.getRating().setDuration(end.getTime() - job.getRating().getRatingStart().getTime());
+                job.getRating().setRating(result);
+                jobDao.update(job);
+            } catch (MessagingException ex) {
+                System.out.println(ex.getLocalizedMessage());
+            }
+            this.interrupt();
         }
     }
 }

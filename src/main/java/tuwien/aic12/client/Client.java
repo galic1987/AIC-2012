@@ -17,43 +17,49 @@ public final class Client {
             "AnalyserService");
     private static final QName SERVICE_ANALYSER_PORT = new QName(SERVER_HOME,
             "AnalyserServicePort");
-
-    private static String token;
     
     private Client() {
     }
 
     public static void main(String args[]) throws Exception {
-        customerServiceTest();
-        analyserTest();
+        performTest();
 
     }
 
-    private static void customerServiceTest() {
+    private static void performTest() {
         System.out.println("\n\n\n CustomerService Test\n\n\n");
         Service service = Service.create(SERVICE_CUSTOMER);
         // Endpoint Address
-        String endpointAddress = "http://localhost:8084/aic12/CustomerService";
+        String endpointAddress = "http://localhost:8084/AIC/CustomerService";
         // Add a port to the Service
         service.addPort(SERVICE_CUSTOMER_PORT, SOAPBinding.SOAP11HTTP_BINDING, endpointAddress);
         CustomerService customerService = service.getPort(CustomerService.class);
-        System.out.println(customerService.registerCustomerInitial("vanja.bisanovic@gmail.com", "vanjalee", "qweasdzxc", "EBCONT  Enterprise Technologies", new Long(10000)));
+        
+        String token;
+        String info;
+        
+        info = customerService.registerCustomerInitial("vanja.bisanovic@gmail.com", "vanjalee", "qweasdzxc", "EBCONT  Enterprise Technologies", new Long(10000));
         token = customerService.login("vanjalee", "qweasdzxc");
+        
+        System.out.println("RECEIVED INFO : " + info);
         System.out.println("RECEIVED TOKEN : " + token);
-        System.out.println(customerService.logout(token));
+        
+        info = customerService.logout(token);
+        
         System.out.println("\n\n\nCustomerService Test Finished.\n\n\n");
-    }
-
-    private static void analyserTest() {
+        
+        token = customerService.login("vanjalee", "qweasdzxc");
+        
         System.out.println("\n\n\nAnalyserService Test\n\n\n");
-        Service service = Service.create(SERVICE_ANALYSER);
+        service = Service.create(SERVICE_ANALYSER);
         // Endpoint Address
-        String endpointAddress = "http://localhost:8084/aic12/AnalyserService";
+        endpointAddress = "http://localhost:8084/AIC/AnalyserService";
         // Add a port to the Service
         service.addPort(SERVICE_ANALYSER_PORT, SOAPBinding.SOAP11HTTP_BINDING, endpointAddress);
         System.out.println("Subject of Twitter Sentiment Analysis : Hugh Hefner");
         AnalyserService analyserService = service.getPort(AnalyserService.class);
         System.out.println(analyserService.analyse("Hugh Hefner", token));
         System.out.println("\n\n\nAnalyserService Test Finished.\n\n\n");
-    }    
+    }
+ 
 }

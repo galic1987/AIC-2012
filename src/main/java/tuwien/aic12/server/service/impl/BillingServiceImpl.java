@@ -2,8 +2,6 @@ package tuwien.aic12.server.service.impl;
 
 import tuwien.aic12.model.Customer;
 import tuwien.aic12.model.Job;
-import tuwien.aic12.model.JobPayedStatus;
-import tuwien.aic12.model.JobStatus;
 import tuwien.aic12.model.Rating;
 import tuwien.aic12.server.Constants;
 import tuwien.aic12.server.dao.CustomerDao;
@@ -21,7 +19,7 @@ public class BillingServiceImpl implements BillingService {
         int numberOfJobsToPay = 0;
         if (customer.getJobs().size() > 0) {
             for (Job job : customer.getJobs()) {
-                if (job.getJobPayedStatus().equals(JobPayedStatus.UNPAYED) && job.getJobStatus().equals(JobStatus.FINISHED)) {
+                if (job.getJobPayedStatus().equals(Job.JobPayedStatus.UNPAYED) && job.getJobStatus().equals(Job.JobStatus.FINISHED)) {
                     numberOfJobsToPay++;
                     Rating rating = job.getRating();
                     price += rating.getFee();
@@ -37,9 +35,9 @@ public class BillingServiceImpl implements BillingService {
         JobDao jobDao = new JobDao();
         Job job = jobDao.read(jobId);
         if (job != null) {
-            if (job.getJobStatus().equals(JobStatus.FINISHED) && job.getJobPayedStatus().equals(JobPayedStatus.UNPAYED)) {
+            if (job.getJobStatus().equals(Job.JobStatus.FINISHED) && job.getJobPayedStatus().equals(Job.JobPayedStatus.UNPAYED)) {
                 if (amount.compareTo(calculateJobBill(jobId)) >= 0) {
-                    job.setJobPayedStatus(JobPayedStatus.PAYED);
+                    job.setJobPayedStatus(Job.JobPayedStatus.PAYED);
                     jobDao.update(job);
                     return "Single rating payed";
                 } else {
@@ -60,8 +58,8 @@ public class BillingServiceImpl implements BillingService {
             if (ammount.compareTo(calculateBill(token)) >= 0) {
                 if (customer.getJobs().size() > 0) {
                     for (Job job : customer.getJobs()) {
-                        if (job.getJobPayedStatus().equals(JobPayedStatus.UNPAYED) && job.getJobStatus().equals(JobStatus.FINISHED)) {
-                            job.setJobPayedStatus(JobPayedStatus.PAYED);
+                        if (job.getJobPayedStatus().equals(Job.JobPayedStatus.UNPAYED) && job.getJobStatus().equals(Job.JobStatus.FINISHED)) {
+                            job.setJobPayedStatus(Job.JobPayedStatus.PAYED);
                         }
                     }
                 }
@@ -81,7 +79,7 @@ public class BillingServiceImpl implements BillingService {
         int numberOfJobsToPay = 0;
         if (customer.getJobs().size() > 0) {
             for (Job job : customer.getJobs()) {
-                if (job.getJobPayedStatus().equals(JobPayedStatus.UNPAYED) && job.getJobStatus().equals(JobStatus.FINISHED)) {
+                if (job.getJobPayedStatus().equals(Job.JobPayedStatus.UNPAYED) && job.getJobStatus().equals(Job.JobStatus.FINISHED)) {
                     numberOfJobsToPay++;
                     Rating rating = job.getRating();
                     price += rating.getFee();
@@ -96,8 +94,8 @@ public class BillingServiceImpl implements BillingService {
         Double price = null;
         JobDao jobDao = new JobDao();
         Job job = jobDao.read(jobId);
-        if (job != null && job.getJobStatus().equals(JobStatus.FINISHED) && job.getJobPayedStatus().equals(JobPayedStatus.UNPAYED)) {
-            job.setJobPayedStatus(JobPayedStatus.PAYED);
+        if (job != null && job.getJobStatus().equals(Job.JobStatus.FINISHED) && job.getJobPayedStatus().equals(Job.JobPayedStatus.UNPAYED)) {
+            job.setJobPayedStatus(Job.JobPayedStatus.PAYED);
             price += job.getRating().getFee();
             price += ((int) (job.getRating().getDuration() / 1000) / Constants.timeSlot) * Constants.timeSlotPrice;
         }

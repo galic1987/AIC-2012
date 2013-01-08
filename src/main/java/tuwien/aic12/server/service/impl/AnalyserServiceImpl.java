@@ -1,14 +1,10 @@
 package tuwien.aic12.server.service.impl;
 
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.mail.MessagingException;
 import tuwien.aic12.model.Customer;
 import tuwien.aic12.model.Job;
-import tuwien.aic12.model.JobPayedStatus;
-import tuwien.aic12.model.JobStatus;
 import tuwien.aic12.model.Rating;
 import tuwien.aic12.server.Constants;
 import tuwien.aic12.server.dao.CustomerDao;
@@ -39,8 +35,8 @@ public class AnalyserServiceImpl implements AnalyserService {
                     job.setCustomer(customer);
                     job.setDateFrom(from);
                     job.setDateTo(to);
-                    job.setJobPayedStatus(JobPayedStatus.UNPAYED);
-                    job.setJobStatus(JobStatus.SCHEDULED);
+                    job.setJobPayedStatus(Job.JobPayedStatus.UNPAYED);
+                    job.setJobStatus(Job.JobStatus.SCHEDULED);
                     job.setSubject(subject);
                     Rating rating = new Rating();
                     rating.setRatingStart(new Date());
@@ -76,15 +72,15 @@ public class AnalyserServiceImpl implements AnalyserService {
     public String analyse(String subject, String token) {
         Customer customer = customerDao.findCustomerByToken(token);
         if (customer != null) {
-            
-            
-            
+
+
+
             if (customer.getRegistred() == true) {
                 if ((new Date().getTime() - customer.getRegisterTime().getTime()) <= customer.getRegisterDuration()) {
                     Job job = new Job();
                     job.setCustomer(customer);
-                    job.setJobPayedStatus(JobPayedStatus.UNPAYED);
-                    job.setJobStatus(JobStatus.SCHEDULED);
+                    job.setJobPayedStatus(Job.JobPayedStatus.UNPAYED);
+                    job.setJobStatus(Job.JobStatus.SCHEDULED);
                     job.setSubject(subject);
                     Rating rating = new Rating();
                     rating.setRatingStart(new Date());
@@ -148,7 +144,7 @@ public class AnalyserServiceImpl implements AnalyserService {
         @Override
         public void run() {
             try {
-                job.setJobStatus(JobStatus.RUNNING);
+                job.setJobStatus(Job.JobStatus.RUNNING);
                 jobDao.update(job);
                 Double result;
                 String emailContent;
@@ -167,7 +163,7 @@ public class AnalyserServiceImpl implements AnalyserService {
                 }
                 mailSender.postMail(reciever, email, emailContent, "Tweets Analysis Report");
                 Date end = new Date();
-                job.setJobStatus(JobStatus.FINISHED);
+                job.setJobStatus(Job.JobStatus.FINISHED);
                 job.getRating().setRatingEnd(end);
                 job.getRating().setDuration(end.getTime() - job.getRating().getRatingStart().getTime());
                 job.getRating().setRating(result);

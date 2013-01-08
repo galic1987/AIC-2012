@@ -37,11 +37,19 @@ public class Job implements Serializable {
     @Enumerated(EnumType.STRING)
     private JobPayedStatus jobPayedStatus;
     @JoinColumn(name = "customerId")
-    @ManyToOne(fetch = FetchType.EAGER)    
+    @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(referencedColumnName = "id", name = "ratingId")
     private Rating rating;
+
+    public enum JobPayedStatus {
+        UNPAYED, PAYED;
+    }
+
+    public enum JobStatus {
+        SCHEDULED, RUNNING, FINISHED;
+    }
 
     public Job() {
     }

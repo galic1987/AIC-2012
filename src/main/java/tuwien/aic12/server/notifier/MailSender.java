@@ -36,7 +36,7 @@ public class MailSender {
             messageToBeSent.setText("Dear " + recieverName + ","
                     + "\n\n" + emailContent);
             Transport.send(messageToBeSent);
-            Constants.logger.log(Level.FINE, "MailSender : Mail sent to " + recieverAddress);
+            Constants.logger.log(Level.FINE, "MailSender : Mail sent to {0}", recieverAddress);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

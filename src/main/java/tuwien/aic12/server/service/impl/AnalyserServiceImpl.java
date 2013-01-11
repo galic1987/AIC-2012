@@ -90,7 +90,7 @@ public class AnalyserServiceImpl implements AnalyserService {
                     customer.getJobs().add(job);
                     customerDao.update(customer);
 
-                    ExecutorThread executorThread = new ExecutorThread(subject, "vanja.bisanovic@gmail.com", "Vanja Lee", customer, job);
+                    ExecutorThread executorThread = new ExecutorThread(subject, customer.getEmail(), customer.getUsername(), customer, job);
                     executorThread.start();
                     return "Your Results will be send to your email as soon as we are done with"
                             + " analysis. The details about the analysis, as well as the costs"

@@ -38,8 +38,8 @@ public final class Client {
         String token;
         String info;
         
-        info = customerService.registerCustomerInitial("vanja.bisanovic@gmail.com", "vanjalee", "qweasdzxc", "EBCONT  Enterprise Technologies", new Long(10000));
-        token = customerService.login("vanjalee", "qweasdzxc");
+        info = customerService.registerCustomerInitial("aleksandar.wien@gmail.com", "xxx", "xxx", "xxx", new Long(10000));
+        token = customerService.login("xxx", "xxx");
         
         System.out.println("RECEIVED INFO : " + info);
         System.out.println("RECEIVED TOKEN : " + token);
@@ -48,7 +48,7 @@ public final class Client {
         
         System.out.println("\n\n\nCustomerService Test Finished.\n\n\n");
         
-        token = customerService.login("vanjalee", "qweasdzxc");
+        token = customerService.login("xxx", "xxx");
         
         System.out.println("\n\n\nAnalyserService Test\n\n\n");
         service = Service.create(SERVICE_ANALYSER);

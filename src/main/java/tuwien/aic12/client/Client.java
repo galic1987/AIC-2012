@@ -32,10 +32,11 @@ public final class Client {
         String company = "EBCONT  Enterprise Technologies";
         Long duration = new Long(999999999);
         
-        String token = "51ldfakfgcufatkugf6rfm9flb";
-        Long jobId = new Long(3);
-        Double amount = 2.75;
-        Double billAmount = 5.75;
+        // Read from db and enter for testing purposes
+        // String token = "51ldfakfgcufatkugf6rfm9flb";
+        // Long jobId = new Long(3);
+        // Double amount = 2.75;
+        // Double billAmount = 5.75;
 
         // testCustomerRegisterInitial(email, username, password, company, duration);
         // testCustomerLogin(username, password);
@@ -45,14 +46,14 @@ public final class Client {
         // testSeach("Jon Jones", token);
         // testSeachFromTo("Jon Jones", "2012-12-30", "2012-12-31", token);
 
-        testBillingGetBill(token);
+        //testBillingGetBill(token);
         // testBillingGetSingleJobBill(jobId, token);
 
         // testBillingPayRating(jobId, amount - 1);
         // testBillingPayRating(jobId, amount);
         
-        testBillingPayBill(token, billAmount - 1);
-        testBillingPayBill(token, billAmount);
+        // testBillingPayBill(token, billAmount - 1);
+        // testBillingPayBill(token, billAmount);
     }
 
     private static void testCustomerLogin(String username, String password) {

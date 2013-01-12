@@ -12,7 +12,7 @@ import tuwien.aic12.server.dao.JobDao;
 import tuwien.aic12.server.notifier.MailSender;
 import tuwien.aic12.server.service.AnalyserService;
 import tuwien.aic12.server.twitter.TwitterService;
-import tuwien.aic12.server.util.StringUtil;
+import tuwien.aic12.server.util.Util;
 
 /**
  *
@@ -138,7 +138,7 @@ public class AnalyserServiceImpl implements AnalyserService {
         public void run() {
             TwitterService twitterService = new TwitterService();
             MailSender mailSender = new MailSender();
-            StringUtil stringUtil = new StringUtil();
+            Util stringUtil = new Util();
             JobDao jobDao = new JobDao();
             try {
                 job.setJobStatus(Job.JobStatus.RUNNING);

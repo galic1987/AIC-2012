@@ -47,6 +47,12 @@ public class JobDao implements Dao<Job> {
         return em.find(Job.class, id);
     }
 
+    public List<Job> getAllJobsForUser(String token) {
+        Query q = em.createQuery("SELECT j FROM job j left join fetch j.customer left join fetch j.rating where j.customer.token = '" + token +  "'");
+        List jobs = q.getResultList();
+        return jobs;
+    }
+    
     public List<Job> readRegisteredJobs() {
         Query q = em.createQuery("SELECT j FROM job j WHERE j.registred = 'true';");
         List jobs = q.getResultList();

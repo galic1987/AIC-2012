@@ -1,11 +1,17 @@
 package tuwien.aic12.server.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
+import tuwien.aic12.dto.JobDTO;
 import tuwien.aic12.model.Customer;
+import tuwien.aic12.model.Job;
 import tuwien.aic12.server.Constants;
 import tuwien.aic12.server.dao.CustomerDao;
+import tuwien.aic12.server.dao.JobDao;
 import tuwien.aic12.server.service.CustomerService;
+import tuwien.aic12.server.util.Util;
 
 public class CustomerServiceImpl implements CustomerService {
 
@@ -38,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
             return TOKEN_INVALID;
         }
     }
-    
+
     @Override
     public String registerCustomer(String company, Long registerDuration) {
         Customer customer = customerDao.findCustomerByCompany(company);
@@ -83,5 +89,21 @@ public class CustomerServiceImpl implements CustomerService {
         } else {
             return errorInfo;
         }
+    }
+
+    @Override
+    public List<JobDTO> getJobs(String token) {
+        Customer customer = customerDao.findCustomerByToken(token);
+        if (customer != null) {
+            JobDao jobDao = new JobDao();
+            List<Job> jobs = jobDao.getAllJobsForUser(token);
+            List<JobDTO> result = new ArrayList<>();
+            for (Job job : jobs) {
+                JobDTO jobDTO = Util.createDTOforJob(job);
+                result.add(jobDTO);
+            }
+            return result;
+        }
+        return null;
     }
 }

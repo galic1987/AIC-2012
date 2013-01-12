@@ -1,8 +1,10 @@
 package tuwien.aic12.client;
 
+import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPBinding;
+import tuwien.aic12.dto.JobDTO;
 import tuwien.aic12.server.service.AnalyserService;
 import tuwien.aic12.server.service.BillingService;
 import tuwien.aic12.server.service.CustomerService;
@@ -33,7 +35,7 @@ public final class Client {
         Long duration = new Long(999999999);
         
         // Read from db and enter for testing purposes
-        // String token = "51ldfakfgcufatkugf6rfm9flb";
+        String token = "51ldfakfgcufatkugf6rfm9flb";
         // Long jobId = new Long(3);
         // Double amount = 2.75;
         // Double billAmount = 5.75;
@@ -54,6 +56,8 @@ public final class Client {
         
         // testBillingPayBill(token, billAmount - 1);
         // testBillingPayBill(token, billAmount);
+        
+        testCustomerGetJobs(token);
     }
 
     private static void testCustomerLogin(String username, String password) {
@@ -82,6 +86,22 @@ public final class Client {
         System.out.println("\n\n\nCustomerService Test Finished.\n\n\n");
     }
 
+    private static void testCustomerGetJobs(String token) {
+        System.out.println("\n\n\n CustomerService getJobs\n\n\n");
+        Service service = Service.create(SERVICE_CUSTOMER);
+        // Endpoint Address
+        String endpointAddress = ENDPOINT_ADDRESS + SCUSTOMER;
+        // Add a port to the Service
+        service.addPort(SERVICE_CUSTOMER_PORT, SOAPBinding.SOAP11HTTP_BINDING, endpointAddress);
+        CustomerService customerService = service.getPort(CustomerService.class);
+        List<JobDTO> results = customerService.getJobs(token);
+        System.out.println("Server : Size of the result list : " + results.size());
+        for(JobDTO jobDto : results) {
+            System.out.println(jobDto.toString());
+        }
+        System.out.println("\n\n\nCustomerService getJobs Test Finished.\n\n\n");
+    }
+    
     private static void testCustomerRegisterInitial(String email, String username, String password, String company, Long duration) {
         System.out.println("\n\n\n CustomerService Test\n\n\n");
         Service service = Service.create(SERVICE_CUSTOMER);
@@ -191,4 +211,5 @@ public final class Client {
         System.out.println("Server : " + feedback);
         System.out.println("\n\n\nBilling Test payBill Finished.\n\n\n");
     }
+    
 }

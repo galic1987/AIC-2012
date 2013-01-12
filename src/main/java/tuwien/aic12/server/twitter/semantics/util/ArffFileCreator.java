@@ -3,13 +3,10 @@ package tuwien.aic12.server.twitter.semantics.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import tuwien.aic12.server.FileSearcher;
 import tuwien.aic12.server.twitter.semantics.documents.DocumentsSet;
 
 /**
@@ -31,32 +28,6 @@ public class ArffFileCreator {
         this._ds = new DocumentsSet();
     }
 
-    public FileOutputStream createFileOutputStream(String path) {
-        FileOutputStream out = null;
-        try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path);
-            String[] split = path.split("/");
-            out = new FileOutputStream(new File(split[split.length - 1]));
-            int read = 0;
-            byte[] bytes = new byte[1024];
-            while ((read = inputStream.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-            inputStream.close();
-            out.flush();
-            return out;
-        } catch (IOException ex) {
-            Logger.getLogger(ArffFileCreator.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                out.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ArffFileCreator.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return null;
-    }
-
     /**
      * creates an arff file for train
      *
@@ -64,7 +35,8 @@ public class ArffFileCreator {
      * @throws FileNotFoundException
      */
     public void createArff_train(String output) throws FileNotFoundException {
-        FileOutputStream fos = createFileOutputStream(output);
+        String filePath = FileSearcher.FindFile(output);
+        FileOutputStream fos = new FileOutputStream(new File(filePath));
         PrintStream write = new PrintStream(fos);
         int i = 0;
         String s;
@@ -78,7 +50,7 @@ public class ArffFileCreator {
         write.println("@attribute polarity {0,4}");
         write.println("@data");
         i = 0;
-        List<Integer> doc = new LinkedList<Integer>();
+        List<Integer> doc = new LinkedList<>();
         while (i < _ds.getD2f_train().size()) {
             doc = _ds.getD2f_train().get(i);
             write.print("{");
@@ -103,7 +75,9 @@ public class ArffFileCreator {
      * @throws FileNotFoundException
      */
     public void createArff_test(String output) throws FileNotFoundException {
-        FileOutputStream fos = createFileOutputStream(output);
+        String filePath = FileSearcher.FindFile(output);
+        FileOutputStream fos = new FileOutputStream(new File(filePath));
+
         PrintStream write = new PrintStream(fos);
         int i = 0;
         String s;
@@ -117,7 +91,7 @@ public class ArffFileCreator {
         write.println("@attribute polarity {0,4}");
         write.println("@data");
         i = 0;
-        List<Integer> doc = new LinkedList<Integer>();
+        List<Integer> doc = new LinkedList<>();
         while (i < _ds.getD2f_test().size()) {
             doc = _ds.getD2f_test().get(i);
             write.print("{");

@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import tuwien.aic12.model.Job;
+import tuwien.aic12.server.Constants;
 
 /**
  *
@@ -50,5 +51,14 @@ public class JobDao implements Dao<Job> {
         Query q = em.createQuery("SELECT j FROM job j WHERE j.registred = 'true';");
         List jobs = q.getResultList();
         return jobs;
+    }
+    
+    public Double calculateJobBill(Long jobId) {               
+        Query q = em.createQuery("SELECT j FROM job j WHERE j.id = " + jobId + ";");
+        Job job = (Job) q.getSingleResult();
+        if(job != null){
+            return job.getPrice();
+        }
+        return null;
     }
 }

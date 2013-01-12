@@ -40,7 +40,7 @@ public class AnalyserServiceImpl implements AnalyserService {
                     job.setSubject(subject);
                     Rating rating = new Rating();
                     rating.setRatingStart(new Date());
-                    rating.setFee(Constants.requestFee);
+                    rating.setFee(Constants.requestFeeFromTo);
                     job.setRating(rating);
                     job = jobDao.update(job);
                     customer.getJobs().add(job);
@@ -72,9 +72,6 @@ public class AnalyserServiceImpl implements AnalyserService {
     public String analyse(String subject, String token) {
         Customer customer = customerDao.findCustomerByToken(token);
         if (customer != null) {
-
-
-
             if (customer.getRegistred() == true) {
                 if ((new Date().getTime() - customer.getRegisterTime().getTime()) <= customer.getRegisterDuration()) {
                     Job job = new Job();
@@ -90,7 +87,7 @@ public class AnalyserServiceImpl implements AnalyserService {
                     customer.getJobs().add(job);
                     customerDao.update(customer);
 
-                    ExecutorThread executorThread = new ExecutorThread(subject, "vanja.bisanovic@gmail.com", "Vanja Lee", customer, job);
+                    ExecutorThread executorThread = new ExecutorThread(subject, customer.getEmail(), customer.getUsername(), customer, job);
                     executorThread.start();
                     return "Your Results will be send to your email as soon as we are done with"
                             + " analysis. The details about the analysis, as well as the costs"
@@ -119,10 +116,6 @@ public class AnalyserServiceImpl implements AnalyserService {
         private String to;
         private String email;
         private String reciever;
-        private TwitterService twitterService = new TwitterService();
-        private MailSender mailSender = new MailSender();
-        private StringUtil stringUtil = new StringUtil();
-        private JobDao jobDao = new JobDao();
         private Job job;
 
         public ExecutorThread(String subject, String email, String reciever, Customer customer, Job job) {
@@ -143,6 +136,10 @@ public class AnalyserServiceImpl implements AnalyserService {
 
         @Override
         public void run() {
+            TwitterService twitterService = new TwitterService();
+            MailSender mailSender = new MailSender();
+            StringUtil stringUtil = new StringUtil();
+            JobDao jobDao = new JobDao();
             try {
                 job.setJobStatus(Job.JobStatus.RUNNING);
                 jobDao.update(job);
@@ -167,6 +164,9 @@ public class AnalyserServiceImpl implements AnalyserService {
                 job.getRating().setRatingEnd(end);
                 job.getRating().setDuration(end.getTime() - job.getRating().getRatingStart().getTime());
                 job.getRating().setRating(result);
+                Double price = job.getRating().getFee();
+                price += ((int) (job.getRating().getDuration() / 1000) / Constants.timeSlot) * Constants.timeSlotPrice;
+                job.setPrice(price);
                 jobDao.update(job);
             } catch (MessagingException ex) {
                 System.out.println(ex.getLocalizedMessage());

@@ -2,7 +2,6 @@ package tuwien.aic12.server.twitter.semantics;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -10,7 +9,7 @@ import java.util.logging.Logger;
 import tuwien.aic12.server.twitter.semantics.classifier.ClassifierBuilder;
 import tuwien.aic12.server.twitter.semantics.classifier.WekaClassifier;
 import tuwien.aic12.server.twitter.semantics.util.Options;
-import twitter4j.Tweet;
+import twitter4j.Status;
 import weka.classifiers.bayes.NaiveBayes;
 
 /**
@@ -19,37 +18,36 @@ import weka.classifiers.bayes.NaiveBayes;
  */
 public class TwitterSemantics {
 
-    private DecimalFormat decimalFormat = new DecimalFormat("#,##");
+    private Double formatValue(Double toFormat) {
+        String sd = toFormat.toString();
+        if(sd.length() > 4) {
+            return Double.valueOf(sd.substring(0, 4));
+        }
+        return toFormat;
+    }
 
-    public Double analyse(List<Tweet> tweets) {
-        Double aMiddle = 0.0;
-        ClassifierBuilder clb = new ClassifierBuilder();
-        Options opt = new Options();
-        clb.setOpt(opt);
-        opt.setSelectedFeaturesByFrequency(true);
-        // seleziona solamente 150 termini
-        opt.setNumFeatures(150);
-        // rimuove le emoticons
-        opt.setRemoveEmoticons(true);
-        List<String> results = new ArrayList<String>();
-        List<Double> convertedResults;
+    public Double analyse(List<Status> tweets) {
         try {
-            //prepara le strutture dati per il train e il test
+            ClassifierBuilder clb = new ClassifierBuilder();
+            Options opt = new Options();
+            clb.setOpt(opt);
+            opt.setSelectedFeaturesByFrequency(true);
+            opt.setNumFeatures(200);
+            opt.setRemoveEmoticons(true);
             clb.prepareTrain();
             clb.prepareTest();
-            //classificatore Weka
             NaiveBayes nb = new NaiveBayes();
-            //costruzione e memorizzazione su disco del classificatore
             WekaClassifier wc = clb.constructClassifier(nb);
-            for (Tweet t : tweets) {
+            List<String> results = new ArrayList<>();
+            wc.evaluate();
+            for (Status t : tweets) {
                 String result = wc.classify(t.getText());
                 results.add(result);
             }
-            convertedResults = convertResults(results);
-            for (Double d : convertedResults) {
-                aMiddle += d;
-            }
-            aMiddle = aMiddle / convertedResults.size();
+            Double estimation = convertResults(results);
+            estimation = formatValue(estimation);
+            System.out.println("Estimation : " + estimation);
+            return estimation;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(TwitterSemantics.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -57,24 +55,54 @@ public class TwitterSemantics {
         } catch (Exception ex) {
             Logger.getLogger(TwitterSemantics.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return Double.valueOf(decimalFormat.format(aMiddle));
+        return null;
     }
 
-    private List<Double> convertResults(List<String> stringResults) {
-        List<Double> returnValue = new ArrayList<Double>();
+    private Double convertResults(List<String> stringResults) {
+        double zero = 0;
+        double four = 0;
+        /*
+        double one = 0;
+        double two = 0;        
+        double three = 0;
+        */        
+        double size = stringResults.size();
         for (String s : stringResults) {
             if (s.equals("0")) {
-                returnValue.add(0.0);
+                ++zero;            
+            /*    
             } else if (s.equals("1")) {
-                returnValue.add(0.25);
+                ++one;            
             } else if (s.equals("2")) {
-                returnValue.add(0.5);
+                ++two;            
             } else if (s.equals("3")) {
-                returnValue.add(0.75);
+                ++three;
+            */    
             } else {
-                returnValue.add(1.0);
+                ++four;
             }
-        }
-        return returnValue;
+        }        
+        System.out.println("Zero : " + zero);
+        System.out.println("Four : " + four);
+        /*
+        System.out.println("One : " + one);        
+        System.out.println("Two : " + two);
+        System.out.println("Three : " + three);
+        */        
+        double zeroD = zero / size;
+        double fourD = four / size;
+        /*
+        double oneD = one / size;
+        double twoD = two / size;
+        double threeD = three / size;
+        */        
+        System.out.println("Zero : " + zeroD);
+        System.out.println("Four : " + fourD);
+        /*
+        System.out.println("One : " + oneD);        
+        System.out.println("Two : " + twoD);
+        System.out.println("Three : " + threeD);
+        */        
+        return fourD;
     }
 }

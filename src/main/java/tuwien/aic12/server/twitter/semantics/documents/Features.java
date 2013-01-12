@@ -2,6 +2,8 @@ package tuwien.aic12.server.twitter.semantics.documents;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import tuwien.aic12.server.FileSearcher;
 
 /**
  * class representing terms in all tweets
@@ -23,7 +26,7 @@ public class Features {
     private List<String> stopwords;
 
     public Features() {
-        this.f2freq = new HashMap<Integer, Integer>();
+        this.f2freq = new HashMap<>();
     }
 
     /**
@@ -127,8 +130,10 @@ public class Features {
      */
     //crea la lista di stopwords da file
     public List<String> createListStopwords() throws IOException {
-        List<String> stop = new LinkedList<String>();
-        InputStream realPath = getClass().getClassLoader().getResourceAsStream("/files/stopwords.txt");
+        List<String> stop = new LinkedList<>();
+        String filePath = FileSearcher.FindFile("stopwords.txt");
+        InputStream realPath = new FileInputStream(new File(filePath));
+        //InputStream realPath = getClass().getClassLoader().getResourceAsStream("/files/stopwords.txt");
         DataInputStream in = new DataInputStream(realPath);
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         String strLine;
@@ -146,7 +151,7 @@ public class Features {
     // crea la mappa delle frequenze
     public void createFeat2Freq() {
         int app;
-        Map<Integer, Integer> f2freqMap = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> f2freqMap = new HashMap<>();
         for (Integer doc : ds.getD2f_train().keySet()) {
             for (Integer feat : ds.getD2f_train().get(doc)) {
                 if (!f2freqMap.containsKey(feat)) {
@@ -170,10 +175,10 @@ public class Features {
      */
     public void selectFeaturesByFrequency(int number) {
         createFeat2Freq();
-        Map<Integer, List<Integer>> index_new = new HashMap<Integer, List<Integer>>();
-        Map<Integer, List<String>> index_new_str = new HashMap<Integer, List<String>>();
-        Map<Integer, String> i2f_new = new HashMap<Integer, String>();
-        Map<String, Integer> f2i_new = new HashMap<String, Integer>();
+        Map<Integer, List<Integer>> index_new = new HashMap<>();
+        Map<Integer, List<String>> index_new_str = new HashMap<>();
+        Map<Integer, String> i2f_new = new HashMap<>();
+        Map<String, Integer> f2i_new = new HashMap<>();
         int i = 0;
         int j = 0;
         while (i < _id2feat.size()) {

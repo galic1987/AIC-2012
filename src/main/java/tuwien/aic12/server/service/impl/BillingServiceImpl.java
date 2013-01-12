@@ -17,31 +17,36 @@ public class BillingServiceImpl implements BillingService {
         Double price = 0.0;
         Customer customer = customerDao.findCustomerByToken(token);
         int numberOfJobsToPay = 0;
-        if (customer.getJobs().size() > 0) {
-            for (Job job : customer.getJobs()) {
-                if (job.getJobPayedStatus().equals(Job.JobPayedStatus.UNPAYED) && job.getJobStatus().equals(Job.JobStatus.FINISHED)) {
-                    numberOfJobsToPay++;
-                    Rating rating = job.getRating();
-                    price += rating.getFee();
-                    price += ((int) (rating.getDuration() / 1000) / Constants.timeSlot) * Constants.timeSlotPrice;
+        if (customer != null) {
+            if (customer.getJobs().size() > 0) {
+                for (Job job : customer.getJobs()) {
+                    if (job.getJobPayedStatus().equals(Job.JobPayedStatus.UNPAYED) && job.getJobStatus().equals(Job.JobStatus.FINISHED)) {
+                        numberOfJobsToPay++;
+                        Rating rating = job.getRating();
+                        price += rating.getFee();
+                        price += ((int) (rating.getDuration() / 1000) / Constants.timeSlot) * Constants.timeSlotPrice;
+                    }
                 }
             }
+            return "Your Bill for " + numberOfJobsToPay + " finished and unpayed jobs is : " + price;
         }
-        return "Your Bill for " + numberOfJobsToPay + " finished and unpayed jobs is : " + price;
+        return "Invalid request...";
     }
 
     @Override
     public String payRating(Long jobId, Double amount) {
+        System.out.println("Paying for job : jobId = " + jobId + " : amount = " + amount);
         JobDao jobDao = new JobDao();
         Job job = jobDao.read(jobId);
         if (job != null) {
             if (job.getJobStatus().equals(Job.JobStatus.FINISHED) && job.getJobPayedStatus().equals(Job.JobPayedStatus.UNPAYED)) {
-                if (amount.compareTo(calculateJobBill(jobId)) >= 0) {
+                Double realPrice = jobDao.calculateJobBill(jobId);
+                if (amount.compareTo(realPrice) >= 0) {
                     job.setJobPayedStatus(Job.JobPayedStatus.PAYED);
                     jobDao.update(job);
                     return "Single rating payed";
                 } else {
-                    return "Provided amount is too small.!";
+                    return "Provided amount is too small.";
                 }
             } else {
                 return "Rating not finished or already payed.";
@@ -52,7 +57,31 @@ public class BillingServiceImpl implements BillingService {
     }
 
     @Override
-    public String payBill(String token, Double ammount) {
+    public String getSingleJobBill(Long jobId, String token) {
+        Customer customer = customerDao.findCustomerByToken(token);
+        JobDao jobDao = new JobDao();
+        if (customer != null) {
+            boolean jobFound = false;
+            if (customer.getJobs().size() > 0) {
+                for (Job job : customer.getJobs()) {
+                    if (job.getId().equals(jobId)) {
+                        jobFound = true;
+                    }
+                }
+            }
+            if (jobFound) {
+                Double bill = jobDao.calculateJobBill(jobId);
+                return "Bill for job : " + jobId + " : " + bill;
+            }
+            return "Bill payed!";
+
+        } else {
+            return "Unknown request.";
+        }
+    }
+
+    @Override
+    public String payBill(Double ammount, String token) {
         Customer customer = customerDao.findCustomerByToken(token);
         if (customer != null) {
             if (ammount.compareTo(calculateBill(token)) >= 0) {
@@ -86,18 +115,6 @@ public class BillingServiceImpl implements BillingService {
                     price += ((int) (rating.getDuration() / 1000) / Constants.timeSlot) * Constants.timeSlotPrice;
                 }
             }
-        }
-        return price;
-    }
-
-    private Double calculateJobBill(Long jobId) {
-        Double price = null;
-        JobDao jobDao = new JobDao();
-        Job job = jobDao.read(jobId);
-        if (job != null && job.getJobStatus().equals(Job.JobStatus.FINISHED) && job.getJobPayedStatus().equals(Job.JobPayedStatus.UNPAYED)) {
-            job.setJobPayedStatus(Job.JobPayedStatus.PAYED);
-            price += job.getRating().getFee();
-            price += ((int) (job.getRating().getDuration() / 1000) / Constants.timeSlot) * Constants.timeSlotPrice;
         }
         return price;
     }

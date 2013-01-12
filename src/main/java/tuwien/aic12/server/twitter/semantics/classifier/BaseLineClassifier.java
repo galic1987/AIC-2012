@@ -2,12 +2,14 @@ package tuwien.aic12.server.twitter.semantics.classifier;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
+import tuwien.aic12.server.FileSearcher;
 
 /**
  * a classifier that only counts positive and negative terms from given lists
@@ -20,13 +22,16 @@ public class BaseLineClassifier implements IClassifier {
     @Override
     public void evaluate() throws Exception {
         int giuste = 0, sbagliate = 0;
-        InputStream realPath = getClass().getClassLoader().getResourceAsStream("/files/test_base.txt");
+        String filePath = FileSearcher.FindFile("test_base.txt");
+        InputStream realPath = new FileInputStream(new File(filePath));
+        
+        // InputStream realPath = getClass().getClassLoader().getResourceAsStream("/files/test_base.txt");
         DataInputStream in = new DataInputStream(realPath);
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         List<String> res_pos = new LinkedList<String>();
         List<String> res_neg = new LinkedList<String>();
-        res_pos = extractFeatures("/files/pos.txt");
-        res_neg = extractFeatures("/files/neg.txt");
+        res_pos = extractFeatures("pos.txt");
+        res_neg = extractFeatures("neg.txt");
         int pos = 0;
         int neg = 0;
         String strLine, pol;
@@ -74,8 +79,8 @@ public class BaseLineClassifier implements IClassifier {
     public String classify(String stringa) {
         List<String> res_pos = new LinkedList<String>();
         List<String> res_neg = new LinkedList<String>();
-        res_pos = extractFeatures("/files/pos.txt");
-        res_neg = extractFeatures("/files/neg.txt");
+        res_pos = extractFeatures("pos.txt");
+        res_neg = extractFeatures("neg.txt");
         int pos = 0;
         int neg = 0;
         String data = stringa;
@@ -105,8 +110,10 @@ public class BaseLineClassifier implements IClassifier {
      */
     public List<String> extractFeatures(String path) {
         List<String> result = new LinkedList<String>();
-        try {
-            InputStream realPath = getClass().getClassLoader().getResourceAsStream(path);
+        try {            
+            String filePath = FileSearcher.FindFile(path);
+            InputStream realPath = new FileInputStream(new File(filePath));
+        
             DataInputStream in = new DataInputStream(realPath);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String strLine;

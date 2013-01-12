@@ -2,12 +2,15 @@ package tuwien.aic12.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -21,7 +24,7 @@ public class Rating implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;   
+    private Long id;
     @Column(name = "rating")
     private Double rating;
     @Column(name = "duration")
@@ -34,6 +37,9 @@ public class Rating implements Serializable {
     private Date ratingEnd;
     @Column(name = "fee")
     private Double fee;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id", name = "jobId")
+    private Job job;
 
     public Rating() {
     }
@@ -44,6 +50,14 @@ public class Rating implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
     }
 
     public Long getDuration() {

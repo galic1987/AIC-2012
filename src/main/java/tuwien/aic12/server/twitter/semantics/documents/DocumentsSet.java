@@ -3,6 +3,7 @@ package tuwien.aic12.server.twitter.semantics.documents;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,10 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import tuwien.aic12.server.FileSearcher;
 import tuwien.aic12.server.twitter.semantics.classifier.Preprocesser;
-import tuwien.aic12.server.twitter.semantics.util.ArffFileCreator;
 import tuwien.aic12.server.twitter.semantics.util.Options;
 
 /**
@@ -114,32 +113,6 @@ public class DocumentsSet {
         return _polarity;
     }
 
-    public FileOutputStream createFileOutputStream(String path) {
-        FileOutputStream out = null;
-        try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path);
-            String[] split = path.split("/");
-            out = new FileOutputStream(new File(split[split.length - 1]));
-            int read;
-            byte[] bytes = new byte[1024];
-            while ((read = inputStream.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-            inputStream.close();
-            out.flush();
-            return out;
-        } catch (IOException ex) {
-            Logger.getLogger(ArffFileCreator.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                out.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ArffFileCreator.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return null;
-    }
-
     /**
      * creates a file containing all preprocessed tweets
      *
@@ -150,24 +123,26 @@ public class DocumentsSet {
      * @param opt options for preprocessing
      */
     public void createFilePreprocessed(String path_input, String path_output, Options opt) {
-        List<String> p = new LinkedList<String>();
+        List<String> p = new LinkedList<>();
         try {
             Preprocesser pr = new Preprocesser(opt);
-            InputStream realPath = getClass().getClassLoader().getResourceAsStream(path_input);
-            DataInputStream in = new DataInputStream(realPath);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String strLine;
-            String str, pol;
-            FileOutputStream prova = createFileOutputStream(path_output);
-            PrintStream scrivi = new PrintStream(prova);
-            while ((strLine = br.readLine()) != null) {
-                String[] items = strLine.split(";;");
-                str = items[5].toLowerCase();
-                pol = items[0];
-                p.add(pol);
-                scrivi.println(pr.preprocessDocument(str));
+            String filePath = FileSearcher.FindFile(path_input);
+            InputStream realPath = new FileInputStream(new File(filePath));
+            try (DataInputStream in = new DataInputStream(realPath)) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                String strLine;
+                String str, pol;
+                String outputFilePath = FileSearcher.FindFile(path_output);
+                FileOutputStream prova = new FileOutputStream(new File(outputFilePath));
+                PrintStream scrivi = new PrintStream(prova);
+                while ((strLine = br.readLine()) != null) {
+                    String[] items = strLine.split(";;");
+                    str = items[5].toLowerCase();
+                    pol = items[0];
+                    p.add(pol);
+                    scrivi.println(pr.preprocessDocument(str));
+                }
             }
-            in.close();
         } catch (Exception e) {
             System.err.println("Errore: " + e.getMessage());
         }
@@ -183,32 +158,33 @@ public class DocumentsSet {
      */
     public void createIndexTest(String path_input) throws IOException {
         int i = 0;
-        Map<Integer, List<Integer>> index = new HashMap<Integer, List<Integer>>();
+        Map<Integer, List<Integer>> index = new HashMap<>();
         Map<String, Integer> f2i = this._feats.getF2i();
         try {
-            InputStream realPath = getClass().getClassLoader().getResourceAsStream(path_input);
-            DataInputStream in = new DataInputStream(realPath);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String strLine;
-            while ((strLine = br.readLine()) != null) {
-                StringTokenizer st = new StringTokenizer(strLine, " 		\";%{}|");
-                index.put(i, new LinkedList<Integer>());
-                while (st.hasMoreTokens()) {
-                    String tmp;
-                    int num;
-                    tmp = st.nextToken();
-                    if (f2i.get(tmp) != null) {
-                        num = f2i.get(tmp);
-                        //solo se non lo contiene gi???
-                        if (!index.get(i).contains(num)) {
-                            index.get(i).add(num);
+            String filePath = FileSearcher.FindFile(path_input);
+            InputStream realPath = new FileInputStream(new File(filePath));
+            try (DataInputStream in = new DataInputStream(realPath)) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                String strLine;
+                while ((strLine = br.readLine()) != null) {
+                    StringTokenizer st = new StringTokenizer(strLine, " 		\";%{}|");
+                    index.put(i, new LinkedList<Integer>());
+                    while (st.hasMoreTokens()) {
+                        String tmp;
+                        int num;
+                        tmp = st.nextToken();
+                        if (f2i.get(tmp) != null) {
+                            num = f2i.get(tmp);
+                            //solo se non lo contiene gi???
+                            if (!index.get(i).contains(num)) {
+                                index.get(i).add(num);
+                            }
                         }
                     }
+                    Collections.sort(index.get(i));
+                    i++;
                 }
-                Collections.sort(index.get(i));
-                i++;
             }
-            in.close();
         } catch (Exception e) {
             System.err.println("Errore: " + e.getMessage());
         }
@@ -226,41 +202,42 @@ public class DocumentsSet {
         this._feats.createListStopwords();
         int i = 0;
         int j = 0;
-        Map<Integer, List<Integer>> index = new HashMap<Integer, List<Integer>>();
-        Map<Integer, List<String>> index_str = new HashMap<Integer, List<String>>();
-        Map<Integer, String> i2f = new HashMap<Integer, String>();
-        Map<String, Integer> f2i = new HashMap<String, Integer>();
+        Map<Integer, List<Integer>> index = new HashMap<>();
+        Map<Integer, List<String>> index_str = new HashMap<>();
+        Map<Integer, String> i2f = new HashMap<>();
+        Map<String, Integer> f2i = new HashMap<>();
         try {
-            InputStream realPath = getClass().getClassLoader().getResourceAsStream(path_input);
-            DataInputStream in = new DataInputStream(realPath);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String strLine;
-            while ((strLine = br.readLine()) != null) {
-                StringTokenizer st = new StringTokenizer(strLine, " 		\";%{}|");
-                index.put(i, new LinkedList<Integer>());
-                index_str.put(i, new LinkedList<String>());
-                while (st.hasMoreTokens()) {
-                    String tmp;
-                    int num;
-                    tmp = st.nextToken();
-                    if (f2i.get(tmp) != null) {
-                        num = f2i.get(tmp);
-                        if (!index.get(i).contains(num)) {
-                            index.get(i).add(num);
+            String filePath = FileSearcher.FindFile(path_input);
+            InputStream realPath = new FileInputStream(new File(filePath));
+            try (DataInputStream in = new DataInputStream(realPath)) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                String strLine;
+                while ((strLine = br.readLine()) != null) {
+                    StringTokenizer st = new StringTokenizer(strLine, " 		\";%{}|");
+                    index.put(i, new LinkedList<Integer>());
+                    index_str.put(i, new LinkedList<String>());
+                    while (st.hasMoreTokens()) {
+                        String tmp;
+                        int num;
+                        tmp = st.nextToken();
+                        if (f2i.get(tmp) != null) {
+                            num = f2i.get(tmp);
+                            if (!index.get(i).contains(num)) {
+                                index.get(i).add(num);
+                                index_str.get(i).add(tmp);
+                            }
+                        } else {//if(!this.feat.getStopwords().contains(tmp)){
+                            f2i.put(tmp, j);
+                            i2f.put(j, tmp);
+                            index.get(i).add(j);
                             index_str.get(i).add(tmp);
+                            j++;
                         }
-                    } else {//if(!this.feat.getStopwords().contains(tmp)){
-                        f2i.put(tmp, j);
-                        i2f.put(j, tmp);
-                        index.get(i).add(j);
-                        index_str.get(i).add(tmp);
-                        j++;
                     }
+                    Collections.sort(index.get(i));
+                    i++;
                 }
-                Collections.sort(index.get(i));
-                i++;
             }
-            in.close();
         } catch (Exception e) {
             System.err.println("Errore: " + e.getMessage());
         }

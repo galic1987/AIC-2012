@@ -1,6 +1,7 @@
 package tuwien.aic12.model;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -39,19 +40,31 @@ public class Job implements Serializable {
     @JoinColumn(name = "customerId")
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id", name = "ratingId")
     private Rating rating;
+    @Column(name = "price")
+    private Double price;
 
     public enum JobPayedStatus {
+
         UNPAYED, PAYED;
     }
 
     public enum JobStatus {
+
         SCHEDULED, RUNNING, FINISHED;
     }
 
     public Job() {
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public JobPayedStatus getJobPayedStatus() {

@@ -1,11 +1,14 @@
 package tuwien.aic12.server.twitter.semantics.classifier;
 
 import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.StringTokenizer;
+import tuwien.aic12.server.FileSearcher;
 import weka.attributeSelection.InfoGainAttributeEval;
 import weka.attributeSelection.Ranker;
 import weka.classifiers.Classifier;
@@ -27,8 +30,13 @@ public class WekaClassifier implements IClassifier, Serializable {
     private Instances _test;
 
     public WekaClassifier() throws Exception {
-        InputStream realPathTrain = getClass().getClassLoader().getResourceAsStream("/files/train1.arff");
-        InputStream realPathTest = getClass().getClassLoader().getResourceAsStream("/files/test1.arff");
+        String trainFilePath = FileSearcher.FindFile("train1.arff");
+        String testFilePath = FileSearcher.FindFile("test1.arff");
+        InputStream realPathTrain = new FileInputStream(new File(trainFilePath));
+        InputStream realPathTest = new FileInputStream(new File(testFilePath));
+        
+        // InputStream realPathTrain = getClass().getClassLoader().getResourceAsStream("/files/train1.arff");
+        // InputStream realPathTest = getClass().getClassLoader().getResourceAsStream("/files/test1.arff");
 
         DataSource source_train = new DataSource(realPathTrain);
         DataSource source_test = new DataSource(realPathTest);

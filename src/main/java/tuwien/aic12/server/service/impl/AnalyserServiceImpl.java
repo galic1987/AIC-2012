@@ -3,6 +3,7 @@ package tuwien.aic12.server.service.impl;
 import java.util.Date;
 import javax.jws.WebService;
 import javax.mail.MessagingException;
+import javax.xml.ws.BindingType;
 import tuwien.aic12.model.Customer;
 import tuwien.aic12.model.Job;
 import tuwien.aic12.model.Rating;
@@ -18,6 +19,7 @@ import tuwien.aic12.server.util.Util;
  *
  * @author vanjalee
  */
+@BindingType(javax.xml.ws.soap.SOAPBinding.SOAP12HTTP_BINDING)
 @WebService(endpointInterface = "tuwien.aic12.server.service.AnalyserService")
 public class AnalyserServiceImpl implements AnalyserService {
 

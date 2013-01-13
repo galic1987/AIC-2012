@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
+import javax.xml.ws.BindingType;
 import tuwien.aic12.dto.JobDTO;
 import tuwien.aic12.model.Customer;
 import tuwien.aic12.model.Job;
@@ -13,6 +14,7 @@ import tuwien.aic12.server.dao.JobDao;
 import tuwien.aic12.server.service.CustomerService;
 import tuwien.aic12.server.util.Util;
 
+@BindingType(javax.xml.ws.soap.SOAPBinding.SOAP12HTTP_BINDING)
 public class CustomerServiceImpl implements CustomerService {
 
     private String CUSTOMER_NOT_FOUND = "Customer not found!";

@@ -1,5 +1,6 @@
 package tuwien.aic12.server.service.impl;
 
+import javax.xml.ws.BindingType;
 import tuwien.aic12.model.Customer;
 import tuwien.aic12.model.Job;
 import tuwien.aic12.model.Rating;
@@ -8,6 +9,7 @@ import tuwien.aic12.server.dao.CustomerDao;
 import tuwien.aic12.server.dao.JobDao;
 import tuwien.aic12.server.service.BillingService;
 
+@BindingType(javax.xml.ws.soap.SOAPBinding.SOAP12HTTP_BINDING)
 public class BillingServiceImpl implements BillingService {
 
     CustomerDao customerDao = new CustomerDao();

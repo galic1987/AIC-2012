@@ -27,7 +27,7 @@ public class AnalyserServiceImpl implements AnalyserService {
     private JobDao jobDao = new JobDao();
 
     @Override
-    public String analyseFromTo(String subject, String from, String to, String token) {
+    public String analyseFromTo(String subject, String dateFrom, String dateTo, String token) {
         Customer customer = customerDao.findCustomerByToken(token);
         if (customer != null) {
             if (customer.getRegistred() == true) {
@@ -35,8 +35,8 @@ public class AnalyserServiceImpl implements AnalyserService {
 
                     Job job = new Job();
                     job.setCustomer(customer);
-                    job.setDateFrom(from);
-                    job.setDateTo(to);
+                    job.setDateFrom(dateFrom);
+                    job.setDateTo(dateTo);
                     job.setJobPayedStatus(Job.JobPayedStatus.UNPAYED);
                     job.setJobStatus(Job.JobStatus.SCHEDULED);
                     job.setSubject(subject);
@@ -48,7 +48,7 @@ public class AnalyserServiceImpl implements AnalyserService {
                     customer.getJobs().add(job);
                     customerDao.update(customer);
 
-                    ExecutorThread executorThread = new ExecutorThread(subject, from, to, customer.getEmail(), customer.getUsername(), customer, job);
+                    ExecutorThread executorThread = new ExecutorThread(subject, dateFrom, dateTo, customer.getEmail(), customer.getUsername(), customer, job);
                     executorThread.start();
                     return "Your Results will be send to your email as soon as we are done with"
                             + " analysis. The details about the analysis, as well as the costs"
@@ -147,12 +147,12 @@ public class AnalyserServiceImpl implements AnalyserService {
                 jobDao.update(job);
                 Double result;
                 String emailContent;
-                if (stringUtil.isNotEmpty(from) || stringUtil.isNotEmpty(to)) {
+                if (Util.isNotEmpty(from) || Util.isNotEmpty(to)) {
                     result = twitterService.getOpinionOfFromTo(subject, from, to);
-                    if (!stringUtil.isNotEmpty(from)) {
+                    if (!Util.isNotEmpty(from)) {
                         from = "some time ago";
                     }
-                    if (!stringUtil.isNotEmpty(to)) {
+                    if (!Util.isNotEmpty(to)) {
                         to = "today";
                     }
                     emailContent = "Twitter community opinion of : " + subject + ", in time period since " + from + " until " + to + ", is : " + result;

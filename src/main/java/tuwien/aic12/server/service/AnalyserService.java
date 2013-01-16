@@ -7,8 +7,8 @@ import javax.jws.WebService;
 public interface AnalyserService {
 
     public String analyseFromTo(@WebParam(name = "subject") String subject,
-            @WebParam(name = "from") String from,
-            @WebParam(name = "to") String to,
+            @WebParam(name = "dateFrom") String dateFrom,
+            @WebParam(name = "dateTo") String dateTo,
             @WebParam(name = "token") String token);
 
     public String analyse(@WebParam(name = "subject") String subject,

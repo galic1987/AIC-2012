@@ -20,7 +20,6 @@ import tuwien.aic12.server.util.Util;
  * @author vanjalee
  */
 @BindingType(javax.xml.ws.soap.SOAPBinding.SOAP12HTTP_BINDING)
-@WebService(endpointInterface = "tuwien.aic12.server.service.AnalyserService")
 public class AnalyserServiceImpl implements AnalyserService {
 
     private CustomerDao customerDao = new CustomerDao();

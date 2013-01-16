@@ -35,17 +35,17 @@ public final class Client {
         Long duration = new Long(999999999);
         
         // Read from db and enter for testing purposes
-        String token = "51ldfakfgcufatkugf6rfm9flb";
+        // String token = "51ldfakfgcufatkugf6rfm9flb";
         // Long jobId = new Long(3);
         // Double amount = 2.75;
         // Double billAmount = 5.75;
 
-        // testCustomerRegisterInitial(email, username, password, company, duration);
-        // testCustomerLogin(username, password);
+        testCustomerRegisterInitial(email, username, password, company, duration);
+        testCustomerLogin(username, password);
 
-        // testSeach("Dana White", token);
+        testSeach("Dana White", token);
         // testSeachFromTo("Dana White", "2010-12-30", "2010-12-31", token);
-        // testSeach("Jon Jones", token);
+        testSeach("Jon Jones", token);
         // testSeachFromTo("Jon Jones", "2012-12-30", "2012-12-31", token);
 
         //testBillingGetBill(token);

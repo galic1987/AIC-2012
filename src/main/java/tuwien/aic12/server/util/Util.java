@@ -23,8 +23,12 @@ public class Util {
     public static JobDTO createDTOforJob(Job job) {
         JobDTO jobDto = new JobDTO();
         jobDto.setJobId(job.getId());
-        jobDto.setStartTime(sdfDateDTO.format(job.getRating().getRatingStart()));
-        jobDto.setEndTime(sdfDateDTO.format(job.getRating().getRatingEnd()));
+        if (job.getRating().getRatingStart() != null) {
+            jobDto.setStartTime(sdfDateDTO.format(job.getRating().getRatingStart()));
+        }
+        if (job.getRating().getRatingEnd() != null) {
+            jobDto.setEndTime(sdfDateDTO.format(job.getRating().getRatingEnd()));
+        }
         jobDto.setRating(job.getRating().getRating());
         jobDto.setSubject(job.getSubject());
         jobDto.setPrice(job.getPrice());
